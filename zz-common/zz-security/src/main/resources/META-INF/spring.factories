@@ -1,0 +1,8 @@
+#预加载，该模块为权限版权，不含启动类，所以需要加载扫描不到的类
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.zz.security.service.CustomUserDetailsServiceImpl,\
+  com.zz.security.filter.JwtTokenFilter,\
+  com.zz.security.access.AccessDeniedHandler,\
+  com.zz.security.access.TokenExceptionHandler,\
+  com.zz.security.config.SecurityConfig,\
+  com.zz.security.service.PermissionService
