@@ -1,9 +1,6 @@
 package com.zz.gateway.filter;
 
-import com.zz.gateway.feign.SecuritypePermissionFeign;
-import com.zz.region.methods.Backtrack;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
@@ -25,9 +22,6 @@ import java.util.List;
 @Slf4j
 public class MyLogGateWayFilter implements GlobalFilter, Ordered {
 
-    @Autowired
-    private SecuritypePermissionFeign securitypePermissionFeign;
-
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
 
@@ -41,8 +35,6 @@ public class MyLogGateWayFilter implements GlobalFilter, Ordered {
         //获取token并验证
         String token = strs.get(0);
         System.out.println(token);
-        Boolean check = Backtrack.checkData(securitypePermissionFeign.verificationToken(token));
-        System.out.println(check);
         return chain.filter(exchange);
     }
 
