@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
+ * 拦截过滤
  * @author wqy
  * @version 1.0
  * @date 2020/8/1 15:23
@@ -30,11 +31,6 @@ public class MyLogGateWayFilter implements GlobalFilter, Ordered {
         System.out.println(request.getPath());
         System.out.println(request.getQueryParams());
         System.out.println(request.getHeaders().get("token"));
-        HttpHeaders headers = request.getHeaders();
-        List<String> strs = headers.get("token");
-        //获取token并验证
-        String token = strs.get(0);
-        System.out.println(token);
         return chain.filter(exchange);
     }
 
