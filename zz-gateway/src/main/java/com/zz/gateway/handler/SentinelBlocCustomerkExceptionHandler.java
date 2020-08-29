@@ -8,6 +8,7 @@ import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.codec.HttpMessageWriter;
 import org.springframework.http.codec.ServerCodecConfigurer;
 import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.lang.NonNull;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import org.springframework.web.reactive.result.view.ViewResolver;
 import org.springframework.web.server.ServerWebExchange;
@@ -18,6 +19,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
+ * 自定义异常处理
+ * 其实就是把官方demo中的异常类复制过来，然后改改handle
  * @author wqy
  * @version 1.0
  * @date 2020/8/28 16:49
@@ -42,6 +45,7 @@ public class SentinelBlocCustomerkExceptionHandler implements WebExceptionHandle
      * @param ex
      * @return
      */
+    @NonNull
     @Override
     public Mono<Void> handle(ServerWebExchange exchange, Throwable ex) {
 
