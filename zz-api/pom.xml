@@ -12,7 +12,8 @@
     <artifactId>zz-api</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>zz-api-authority</module>
+
+        <module>zz-system-api</module>
     </modules>
 
 

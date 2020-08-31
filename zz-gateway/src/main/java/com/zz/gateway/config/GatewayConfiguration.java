@@ -110,6 +110,10 @@ public class GatewayConfiguration {
             .setCount(1)
             .setIntervalSec(1)
         );
+        rules.add(new GatewayFlowRule("zz-jwt")
+                .setCount(1)
+                .setIntervalSec(1)
+        );
         GatewayRuleManager.loadRules(rules);
     }
 }

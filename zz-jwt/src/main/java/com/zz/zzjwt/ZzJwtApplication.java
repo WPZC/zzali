@@ -3,7 +3,7 @@ package com.zz.zzjwt;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import com.zz.security.annotation.EnableRyFeignClients;
+import com.zz.security.annotation.EnableZzFeignClients;
 
 /**
  * @author wqy
@@ -12,7 +12,7 @@ import com.zz.security.annotation.EnableRyFeignClients;
  */
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableRyFeignClients
+@EnableZzFeignClients
 public class ZzJwtApplication {
 
     public static void main(String[] args) {

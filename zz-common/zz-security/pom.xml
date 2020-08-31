@@ -40,6 +40,13 @@
             <artifactId>zz-common-region</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+
+        <!--引入api-->
+        <dependency>
+            <groupId>com.zz</groupId>
+            <artifactId>zz-system-api</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 </project>

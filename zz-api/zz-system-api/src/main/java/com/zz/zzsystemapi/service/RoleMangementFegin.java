@@ -1,7 +1,9 @@
-package com.zz.security.feign;
+package com.zz.zzsystemapi.service;
 
+import com.zz.region.ServiceNameConstants;
 import com.zz.region.domain.authority.RoleEntity;
 import com.zz.region.vo.ResultVO;
+import com.zz.zzsystemapi.factory.RemoteRoleFallbackFactory;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,7 +16,7 @@ import java.util.List;
  * @version 1.0
  * @date 2020/5/28 11:34
  */
-@FeignClient(value = "zz-system-api")
+@FeignClient(contextId = "roleMangementFegin", value = ServiceNameConstants.SYSTEM_SERVICE, fallbackFactory = RemoteRoleFallbackFactory.class)
 public interface RoleMangementFegin {
 
     /**

@@ -1,11 +1,11 @@
 server:
-  port: 9502
+  port: 9505
   tomcat:
     uri-encoding: UTF-8
 
 spring:
   application:
-    name: zz-system-api
+    name: zz-api-authority
   cloud:
     nacos:
       discovery:
@@ -18,7 +18,7 @@ spring:
         #此处只是对应config的命名空间
         #namespace: b7d26021-28b5-42d1-b36d-737a818a2146
     profiles:
-      active: test
+      active: dev
   datasource:
     name: db-base
     url: jdbc:mysql://localhost:3306/cloudall?serverTimezone=GMT%2B8

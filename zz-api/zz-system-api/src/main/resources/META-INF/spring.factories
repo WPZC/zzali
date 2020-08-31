@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.zz.zzsystemapi.factory.RemoteUserFallbackFactory,\
+  com.zz.zzsystemapi.factory.RemoteRoleFallbackFactory

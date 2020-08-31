@@ -13,10 +13,10 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients
-public class ZzApiAuthorityApiApplicatoin {
+public class ZzApiAuthorityApplicatoin {
 
     public static void main(String[] args) {
-        SpringApplication.run(ZzApiAuthorityApiApplicatoin.class, args);
+        SpringApplication.run(ZzApiAuthorityApplicatoin.class, args);
     }
 
 }

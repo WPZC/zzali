@@ -9,6 +9,7 @@
         <module>zz-jwt</module>
         <module>zz-gateway</module>
         <module>zz-api</module>
+        <module>zz-db-temlpate</module>
         <module>zz-db</module>
     </modules>
     <parent>

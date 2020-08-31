@@ -15,6 +15,7 @@
         <module>zz-security</module>
         <module>zz-common-region</module>
         <module>zz-log</module>
+        <module>zz-redis</module>
     </modules>
 
 

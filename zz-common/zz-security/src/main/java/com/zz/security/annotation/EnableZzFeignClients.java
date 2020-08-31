@@ -14,11 +14,11 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @EnableFeignClients
-public @interface EnableRyFeignClients
+public @interface EnableZzFeignClients
 {
     String[] value() default {};
 
-    String[] basePackages() default { "com.zz.security.feign" };
+    String[] basePackages() default { "com.zz" };
 
     Class<?>[] basePackageClasses() default {};
 
