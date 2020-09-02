@@ -1,10 +1,11 @@
 package com.zz.zzsystemapi.factory;
 
+import com.zz.region.domain.PageData;
+import com.zz.region.domain.authority.Menu;
 import com.zz.region.domain.authority.RoleEntity;
-import com.zz.region.domain.authority.UserEntity;
+import com.zz.region.domain.authority.RoleMenu;
 import com.zz.region.vo.ResultVO;
 import com.zz.zzsystemapi.service.RoleMangementFegin;
-import com.zz.zzsystemapi.service.UserMangementFegin;
 import feign.hystrix.FallbackFactory;
 import org.springframework.stereotype.Component;
 
@@ -45,7 +46,27 @@ public class RemoteRoleFallbackFactory implements FallbackFactory<RoleMangementF
             }
 
             @Override
+            public ResultVO<PageData<RoleEntity>> getRoleMsgs(Integer currentPage) {
+                return null;
+            }
+
+            @Override
+            public ResultVO<List<RoleMenu>> getRoleMenus(Long r_id) {
+                return null;
+            }
+
+            @Override
+            public ResultVO<String> saveNodes(List<RoleMenu> roleMenus) {
+                return null;
+            }
+
+            @Override
             public ResultVO<List<RoleEntity>> getRoleMsgsList() {
+                return null;
+            }
+
+            @Override
+            public ResultVO<List<Menu>> getMenuByRId(Long id) {
                 return null;
             }
         };

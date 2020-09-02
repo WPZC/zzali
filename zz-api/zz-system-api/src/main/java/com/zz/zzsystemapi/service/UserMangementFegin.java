@@ -1,6 +1,7 @@
 package com.zz.zzsystemapi.service;
 
 import com.zz.region.ServiceNameConstants;
+import com.zz.region.domain.PageData;
 import com.zz.region.domain.authority.RoleEntity;
 import com.zz.region.domain.authority.UserEntity;
 import com.zz.region.vo.ResultVO;
@@ -26,7 +27,15 @@ public interface UserMangementFegin {
     ResultVO<String> addUser(@RequestBody UserEntity userEntity, @RequestParam("roleId")Long roleId);
 
     @RequestMapping(value = "/uct/updateUser")
-    ResultVO<String> updateUser(@RequestBody UserEntity userEntity,@RequestParam("roleId")Long roleId);
+    ResultVO<String> updateUser(@RequestBody UserEntity userEntity, @RequestParam("roleId")Long roleId);
+
+    /**
+     * 获取用户列表(分页)
+     * @param currentPage
+     * @return
+     */
+    @PostMapping(value = "/uct/findByPage")
+    ResultVO<PageData<UserEntity>> findByPage(@RequestParam("currentPage") Integer currentPage);
 
     /**
      * 删除用户

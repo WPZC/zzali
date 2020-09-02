@@ -60,6 +60,14 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
+        <!--knife4j-->
+        <!-- https://mvnrepository.com/artifact/com.github.xiaoymin/knife4j-spring-boot-starter -->
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-spring-boot-starter</artifactId>
+            <version>2.0.2</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
