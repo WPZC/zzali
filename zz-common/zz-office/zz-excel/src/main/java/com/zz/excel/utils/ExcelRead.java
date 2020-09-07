@@ -17,9 +17,9 @@ import java.util.List;
 /**
  * @author wqy
  * @version 1.0
- * @date 2020/9/7 16:35
+ * @date 2020/9/7 17:44
  */
-public class ExcelUtils {
+public class ExcelRead {
 
     /**
      * 读多个或者全部sheet,这里注意一个sheet不能读取多次，多次读取需要重新读取文件
@@ -33,7 +33,7 @@ public class ExcelUtils {
      * @param listeners listener集合与classes一一对用
      * @param fileUrl 文件路径
      */
-    public void repeatedRead(List<Class> classes,List<BaseListener> listeners, String fileUrl) {
+    public void repeatedRead(List<Class> classes, List<BaseListener> listeners, String fileUrl) {
         // 读取部分sheet
         String fileName = fileUrl;
         ExcelReader excelReader = EasyExcel.read(fileName).build();
@@ -67,7 +67,7 @@ public class ExcelUtils {
      * @return
      * @throws IOException
      */
-    public String upload(MultipartFile file,Class c,BaseListener b) throws IOException {
+    public String upload(MultipartFile file, Class c, BaseListener b) throws IOException {
         ExcelReader excelReader = EasyExcel.read(file.getInputStream()).build();
         read(excelReader,c,b);
         return "success";
@@ -154,7 +154,7 @@ public class ExcelUtils {
      * @param c
      * @param b
      */
-    private void read(ExcelReader excelReader,Class c,BaseListener b){
+    private void read(ExcelReader excelReader, Class c, BaseListener b){
         try {
             ReadSheet readSheet = EasyExcel.readSheet(0).head(c).registerReadListener(b).build();
             excelReader.read(readSheet);
@@ -165,5 +165,6 @@ public class ExcelUtils {
             }
         }
     }
+
 
 }

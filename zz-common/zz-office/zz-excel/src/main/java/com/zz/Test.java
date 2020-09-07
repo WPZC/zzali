@@ -1,15 +1,10 @@
 package com.zz;
 
-import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.ExcelReader;
-import com.alibaba.excel.read.metadata.ReadSheet;
-import com.zz.entity.BaseData;
 import com.zz.entity.TestData;
-import com.zz.excel.utils.ExcelUtils;
+import com.zz.excel.ExcelUtils;
 import com.zz.listener.BaseListener;
 import com.zz.listener.TestListener;
 
-import java.io.File;
 import java.util.*;
 
 /**
@@ -44,9 +39,7 @@ public class Test {
         listeners.add(new TestListener());
         listeners.add(new TestListener());
 
-        ExcelUtils excelUtils = new ExcelUtils();
-
-        excelUtils.repeatedRead(classes,listeners,fileName);
+        ExcelUtils.EXCEL_READ.repeatedRead(classes,listeners,fileName);
     }
 
 
