@@ -17,6 +17,12 @@ public class Test {
     @ResponseBody
     public String test(){
 
+        String s = "";
+
+        for(int i = 0;i<100;i++){
+            s = s + i;
+        }
+
         return "这是test服务";
 
     }

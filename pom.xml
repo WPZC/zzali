@@ -11,6 +11,7 @@
         <module>zz-api</module>
         <module>zz-db-temlpate</module>
         <module>zz-db</module>
+        <module>zz-moduls</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
