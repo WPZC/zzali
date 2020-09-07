@@ -11,5 +11,17 @@
 
     <artifactId>zz-excel</artifactId>
 
+    <dependencies>
+        <!--easyexcel，推荐使用2.0 以上版本，功能更加完善-->
+        <!-- https://mvnrepository.com/artifact/com.alibaba/easyexcel -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
+            <version>2.2.6</version>
+        </dependency>
+
+
+    </dependencies>
+
 
 </project>
