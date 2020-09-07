@@ -46,6 +46,17 @@ public abstract class BaseService<T extends BaseDoMain,K extends BaseDao>{
      * @return
      */
     public K k(){return k;}
+
+    /**
+     * 根据ID查询
+     * @param Id
+     * @return
+     */
+    public T findById(Long Id){
+
+        return (T) k.findById(Id).get();
+
+    }
     /**
      * 分页查询
      * @param currentPage
