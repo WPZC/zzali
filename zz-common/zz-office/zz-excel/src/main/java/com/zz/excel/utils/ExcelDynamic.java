@@ -4,8 +4,7 @@ import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelReader;
 import com.alibaba.excel.read.metadata.ReadSheet;
 import com.zz.entity.TestData;
-import com.zz.listener.BaseListener;
-import com.zz.listener.TestListener;
+import com.zz.listener.ExcelDynamicListener;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -15,26 +14,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * excel读取工具类
+ * excel可配置字段解决方案,读取的方法跟ExcelRead里基本一样，唯一不同的就是listener，
+ * 此处用的是ExcelDynamicListener,此类中含有存库和解析的代码，将数据转成自定义的top字段格式，
+ * 可参考类{@link com.zz.entity.BaseAnalysis},然后按照ExcelDynamicListener中的方法，重写或者只实现saveDataToDb就可以进行存库操作，存库调用的是
+ * ExcelBaseDao.txt中的方法，此txt含有的是一个ExcelBaseDao类.
+ * 存库以后就是自定义格式后的数据，然后查询自己可以进行字符串分隔的方式进行查询。具体项目可以参考污染普查。
  * @author wqy
  * @version 1.0
- * @date 2020/9/7 17:44
+ * @date 2020/9/8 10:06
  */
-public class ExcelRead {
+public class ExcelDynamic {
 
     /**
      * 读多个或者全部sheet,这里注意一个sheet不能读取多次，多次读取需要重新读取文件
      * <p>
      * 1. 创建excel对应的实体对象 参照{@link TestData}
      * <p>
-     * 2. 由于默认一行行的读取excel，所以需要创建excel一行一行的回调监听器，参照{@link TestListener}
+     * 2. 由于默认一行行的读取excel，所以需要创建excel一行一行的回调监听器，参照{@link ExcelDynamicListener}
      * <p>
      * 3. 直接读即可
      * @param classes 类信息（对应的excel类）
      * @param listeners listener集合与classes一一对用
      * @param fileUrl 文件路径
      */
-    public void repeatedRead(List<Class> classes, List<BaseListener> listeners, String fileUrl) {
+    public void repeatedRead(List<Class> classes, List<ExcelDynamicListener> listeners, String fileUrl) {
         // 读取部分sheet
         String fileName = fileUrl;
         ExcelReader excelReader = EasyExcel.read(fileName).build();
@@ -45,13 +48,13 @@ public class ExcelRead {
     /**
      * 单sheet读取
      * <p>1. 创建excel对应的实体对象 参照{@link TestData}
-     * <p>2. 由于默认一行行的读取excel，所以需要创建excel一行一行的回调监听器，参照{@link TestListener}
+     * <p>2. 由于默认一行行的读取excel，所以需要创建excel一行一行的回调监听器，参照{@link ExcelDynamicListener}
      * <p>3. 直接读即可
      * @param c 类信息
      * @param b listener listener信息参照TestListener;
      * @param fileUrl 文件路径
      */
-    public void simpleRead(Class c,BaseListener b,String fileUrl) {
+    public void simpleRead(Class c,ExcelDynamicListener b,String fileUrl) {
         // 有个很重要的点 DemoDataListener 不能被spring管理，要每次读取excel都要new,然后里面用到spring可以构造方法传进去
         // 写法1：
         String fileName = fileUrl;
@@ -68,7 +71,7 @@ public class ExcelRead {
      * @return
      * @throws IOException
      */
-    public String upload(MultipartFile file, Class c, BaseListener b) throws IOException {
+    public String upload(MultipartFile file, Class c, ExcelDynamicListener b) throws IOException {
         ExcelReader excelReader = EasyExcel.read(file.getInputStream()).build();
         read(excelReader,c,b);
         return "success";
@@ -82,7 +85,7 @@ public class ExcelRead {
      * @return
      * @throws IOException
      */
-    public String upload(MultipartFile file,List<Class> classes,List<BaseListener> listeners) throws IOException {
+    public String upload(MultipartFile file,List<Class> classes,List<ExcelDynamicListener> listeners) throws IOException {
 
         ExcelReader excelReader = null;
         excelReader = getReader(file.getInputStream());
@@ -121,7 +124,7 @@ public class ExcelRead {
      * @param classes
      * @param listeners
      */
-    private void read(ExcelReader excelReader,List<Class> classes,List<BaseListener> listeners){
+    private void read(ExcelReader excelReader,List<Class> classes,List<ExcelDynamicListener> listeners){
 
         //验证classes是否等于listeners
         if(classes.size()!=listeners.size()){
@@ -155,7 +158,7 @@ public class ExcelRead {
      * @param c
      * @param b
      */
-    private void read(ExcelReader excelReader, Class c, BaseListener b){
+    private void read(ExcelReader excelReader, Class c, ExcelDynamicListener b){
         try {
             ReadSheet readSheet = EasyExcel.readSheet(0).head(c).registerReadListener(b).build();
             excelReader.read(readSheet);
@@ -166,6 +169,7 @@ public class ExcelRead {
             }
         }
     }
+
 
 
 }

@@ -107,7 +107,7 @@
         <clirr-maven-plugin.version>2.7</clirr-maven-plugin.version>
         <maven-enforcer-plugin.version>1.4.1</maven-enforcer-plugin.version>
         <maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
-        <maven-javadoc-plugin.version>2.10.4</maven-javadoc-plugin.version>
+        <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
         <maven-pmd-plugin.version>3.8</maven-pmd-plugin.version>
         <apache-rat-plugin.version>0.12</apache-rat-plugin.version>
@@ -1039,5 +1039,6 @@
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
+
 </project>
 

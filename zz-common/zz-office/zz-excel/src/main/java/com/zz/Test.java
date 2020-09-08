@@ -1,5 +1,6 @@
 package com.zz;
 
+import com.zz.entity.BaseData;
 import com.zz.entity.TestData;
 import com.zz.excel.ExcelUtils;
 import com.zz.listener.BaseListener;
@@ -40,6 +41,31 @@ public class Test {
         listeners.add(new TestListener());
 
         ExcelUtils.EXCEL_READ.repeatedRead(classes,listeners,fileName);
+
+        List<String> sheetNames = new ArrayList<>();
+        sheetNames.add("测试1");
+        sheetNames.add("测试2");
+        TestData t = new TestData();
+        t.setAge(11);
+        t.setClassSn(1);
+        t.setName("C");
+        t.setSchool("dwa");
+        t.setSn(1);
+        List<BaseData> list = new ArrayList<>();
+        list.add(t);
+        TestData t1 = new TestData();
+        t1.setAge(11);
+        t1.setClassSn(1);
+        t1.setName("C");
+        t1.setSchool("dwa");
+        t1.setSn(1);
+        List<BaseData> list1= new ArrayList<>();
+        list1.add(t1);
+
+        List<List<BaseData>> lists= new ArrayList<>();
+        lists.add(list);
+        lists.add(list1);
+        ExcelUtils.EXCEL_WRITE.write("F:\\桌面\\测试.xlsx",classes,sheetNames,lists);
     }
 
 

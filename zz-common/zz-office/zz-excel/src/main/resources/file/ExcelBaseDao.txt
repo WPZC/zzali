@@ -1,0 +1,265 @@
+package com.model.cloudall.mobilesource.excel.dao;
+
+import com.model.cloudall.mobilesource.common.methods.utils.StringUtil;
+import com.model.cloudall.mobilesource.excel.config.ThreadLoadMsg;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+
+/**
+ * @author wqy
+ * @version 1.0
+ * @date 2020/6/17 11:44
+ */
+
+@Component
+@Transactional
+public class ExcelBaseDao {
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+    //获取分隔符
+    @Value("${configm.separation}")
+    private String separation;
+
+    /**
+     * 保存多条数据
+     * @param maps
+     * @param tableName
+     */
+    public void saveExcelToDb(List<LinkedHashMap<String,List<String>>> maps, String tableName){
+        //固定的头部数据
+        String head = "INSERT INTO "+tableName+"(`top10`, `top20`, `top30`, `top40`, `top50`, `top60`, `top70`, `top80`, `top90`, `top100`, `save_time`,`years`) VALUES ";
+        //循环需要插入的数据
+        String values = "";
+        for (int j = 0,num = maps.size();j<num;j++){
+
+            LinkedHashMap<String,List<String>> map = maps.get(j);
+
+            String value = "(";
+            String topstr = null;
+            //由于是100个字段分了十组所以为10*10
+            for (int i = 10;i<=100;i=i+10){
+                //判断是否含有这个key,从top10开始
+                if(map.containsKey("top"+i)){
+                    List<String> list = map.get("top"+i);
+                    topstr = "'"+separation+StringUtils.join(list, separation)+separation+"'";
+                }else{
+                    topstr = null;
+                }
+//                if(i==(100)){
+//                    value = value + topstr ;
+//                }else{
+                value = value + topstr +",";
+                //}
+            }
+            value = value + "'"+format.format(System.currentTimeMillis())+ "','"+ ThreadLoadMsg.YEARS_THREAD_LOCAL.get() +"')";
+            if(j==(num-1)){
+                values = values+ value;
+            }else{
+                values = values+ value+",";
+            }
+        }
+
+        String sql = head+values;
+
+        //保存数据
+        entityManager.createNativeQuery(sql).executeUpdate();
+    }
+
+    /**
+     * 整理添加数据
+     * @param list
+     * @param isId 是否有ID
+     * @return
+     */
+    public List<String> addFinishing(List<String> list,Boolean isId){
+
+        for (int i = 0,num = list.size();i<num;i++){
+            if(i==0){
+                if(isId){
+                    continue;
+                }
+            }
+            if(null == list.get(i)||"".equals(list.get(i))){
+                continue;
+            }
+            if(isId){
+                list.set(i,list.get(i)+ "_" + StringUtil.paraeString4(i-1));
+            }else{
+                list.set(i,list.get(i)+ "_" + StringUtil.paraeString4(i));
+            }
+
+        }
+        return list;
+    }
+
+
+
+    /**
+     * 保存单条数据
+     * @param list
+     * @param tableName
+     * @param xh 序号
+     */
+    public void saveExcelOneData(List<String> list, String tableName,String xh){
+        //处理数据
+        list = addFinishing(list,false);
+        //固定的头部数据
+        String head = "INSERT INTO "+tableName+"(`top10`, `top20`, `top30`, `top40`, `top50`, `top60`, `top70`, `top80`, `top90`, `top100`, `save_time`, `years`) VALUES ";
+        //循环需要插入的数据
+        String value = "('";
+        String topstr = "";
+
+        //如果xh不等于空，则调过第一次循环
+        //序号如果为null，则代表该excel没有序号字段，有则添加一个null
+        if(null!=xh){
+            list.set(0,xh);
+        }
+
+        //由于是100个字段分了十组所以为10*10
+        for (int i = 0;i<100;i++){
+            //等于0如何处理
+            if((i+1)%10==0&&i!=0){
+                if((i+1)==100){
+                    //判断是否越界
+                    if(list.size()>i){
+                        value = value + separation + topstr + (list.get(i)==null?"":list.get(i)) + separation;
+                    }else{
+                        value = value + separation + topstr + "" + separation;
+                    }
+
+                    continue;
+                }
+                //判断是否越界
+                if(list.size()>i){
+                    value = value + separation + topstr + (list.get(i)==null?"":list.get(i)) + separation +"','";
+                }else{
+                    value = value + separation + topstr + ""+ separation +"','";
+                }
+                topstr = "";
+            }else{
+                //不等于0怎么处理
+                if(list.size()>i){
+                    topstr = topstr + (list.get(i)==null?"":list.get(i))+separation;
+                }else{
+                    topstr = topstr + separation;
+                }
+            }
+
+        }
+
+        value = value + "','"+format.format(System.currentTimeMillis())+ "','"+ ThreadLoadMsg.YEARS_THREAD_LOCAL.get() +"')";
+
+        String sql = head+value;
+
+        //保存数据
+        entityManager.createNativeQuery(sql).executeUpdate();
+    }
+
+
+    /**
+     * 编辑单条数据
+     * @param list
+     * @param tableName
+     */
+    public void updateExcelOneData(List<String> list, String tableName){
+        //整理数据
+        list = addFinishing(list,true);
+        //固定的头部数据
+        String head = "INSERT INTO "+tableName+"(`id`,`top10`, `top20`, `top30`, `top40`, `top50`, `top60`, `top70`, `top80`, `top90`, `top100`, `save_time`, `years`) VALUES ";
+        //循环需要插入的数据
+        String value = "('"+list.get(0)+" '" +",'";
+        String topstr = "";
+
+        //删除第一个ID，避免误存
+        list.remove(0);
+
+        //由于是100个字段分了十组所以为10*10
+        for (int i = 0;i<100;i++){
+            //等于0如何处理
+            if((i+1)%10==0&&i!=0){
+                if((i+1)==100){
+                    //判断是否越界
+                    if(list.size()>i){
+                        value = value + separation + topstr + (list.get(i)==null?"":list.get(i)) + separation;
+                    }else{
+                        value = value + separation + topstr + "" + separation;
+                    }
+
+                    continue;
+                }
+                //判断是否越界
+                if(list.size()>i){
+                    value = value + separation + topstr + (list.get(i)==null?"":list.get(i)) + separation +"','";
+                }else{
+                    value = value + separation + topstr + ""+ separation +"','";
+                }
+                topstr = "";
+            }else{
+                //不等于0怎么处理
+                if(list.size()>i){
+                    topstr = topstr + (list.get(i)==null?"":list.get(i))+separation;
+                }else{
+                    topstr = topstr + separation;
+                }
+            }
+
+        }
+
+        value = value + "','"+format.format(System.currentTimeMillis())+ "','"+ ThreadLoadMsg.YEARS_THREAD_LOCAL.get() +"')";
+
+        String sql = head+value;
+
+        //保存数据
+        entityManager.createNativeQuery(sql).executeUpdate();
+    }
+
+    /**
+     * 查询单条数据
+     * @param params(以top*为key，value为值的map)
+     * @param c 结果类型
+     * @param <T>
+     */
+    public <T> List<T> findAllByParams(HashMap<String,List<Object>> params,String tableName,Class c){
+
+        String sql = "select * from "+ tableName;
+
+        String where = "";
+
+        if(params.size()!=0){
+            //拼接where
+            for (String key:params.keySet()){
+
+                List<Object> list = params.get(key);
+
+                for (int i = 0,num = list.size();i<num;i++){
+                    if(where.equals("")){
+                        where = where + " where ";
+                        where = where + key +" LIKE '%"+list.get(i)+"%'";
+                    }else{
+                        where = where + " and " + key +" LIKE '%"+list.get(i)+"%'";
+                    }
+                }
+
+
+            }
+        }
+
+        sql = sql + where;
+
+        return entityManager.createNativeQuery(sql,c).getResultList();
+    }
+
+}
