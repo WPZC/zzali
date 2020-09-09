@@ -11,5 +11,13 @@
 
     <artifactId>zz-common-region</artifactId>
 
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/javax.persistence/javax.persistence-api -->
+        <dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>javax.persistence-api</artifactId>
+        </dependency>
+
+    </dependencies>
 
 </project>

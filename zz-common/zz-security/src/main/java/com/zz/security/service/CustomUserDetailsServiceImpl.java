@@ -1,11 +1,11 @@
 package com.zz.security.service;
 
-import com.zz.region.domain.authority.RoleEntity;
-import com.zz.region.domain.authority.UserEntity;
+import com.zz.region.domain.authority.Role;
+import com.zz.region.domain.authority.User;
+import com.zz.region.methods.ead.EAD;
 import com.zz.security.domain.AuthUser;
 import com.zz.zzsystemapi.service.RoleMangementFegin;
 import com.zz.zzsystemapi.service.UserMangementFegin;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -32,13 +32,13 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        UserEntity user = userMangementFegin.findByUserName(username);
+        User user = userMangementFegin.findByUserName(username,EAD.encode());
  
         if (user == null) {
             throw new UsernameNotFoundException("user: " + username + " is not found.");
         }
  
-        return new AuthUser(user.getUsername(), user.getPassword(), roleMangementFegin.findByUserRole(user.getId()));
+        return new AuthUser(user.getUsername(), user.getPassword(), roleMangementFegin.findByUserRole(user.getId(), EAD.encode()));
     }
  
     @Bean
@@ -51,15 +51,15 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
         System.out.println(bCryptPasswordEncoder.encode("123456"));
     }
 
-    public UserEntity findByUserName(String username) {
+    public User findByUserName(String username,String encode) {
 
-        return userMangementFegin.findByUserName(username);
+        return userMangementFegin.findByUserName(username,encode);
 
     }
 
-    public List<RoleEntity> findByUserRole(Long id) {
+    public List<Role> findByUserRole(Long id) {
 
-        return roleMangementFegin.findByUserRole(id);
+        return roleMangementFegin.findByUserRole(id, EAD.encode());
 
     }
 }

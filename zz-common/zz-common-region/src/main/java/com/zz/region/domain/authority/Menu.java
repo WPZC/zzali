@@ -6,16 +6,21 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.Tolerate;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
- * @Description  
+ * @Description
  * @Author  WQY
- * @Date 2020-06-09 
+ * @Date 2020-06-09
  */
-@Builder
+@Entity
 @Data
 @ApiModel(value = "菜单信息")
-public class Menu  {
+public class Menu{
 
+	@Id
 	@ApiModelProperty(value = "id",name = "id",dataType = "Long")
 	private Long id;
 
@@ -46,11 +51,7 @@ public class Menu  {
 	/**
 	 * 子菜单序号
 	 */
-	@ApiModelProperty(value = "子菜单序号",name = "index",dataType = "String")
-	private String index;
-
-	@Tolerate
-	public Menu (){}
-
+	@ApiModelProperty(value = "子菜单序号",name = "indexNum",dataType = "String")
+	private String indexNum;
 
 }

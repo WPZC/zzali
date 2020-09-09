@@ -1,10 +1,11 @@
 server:
-  port: 9501
+  port: 9505
   tomcat:
     uri-encoding: UTF-8
+
 spring:
   application:
-    name: zz-jwt
+    name: zz-base-api
   cloud:
     nacos:
       discovery:
@@ -18,9 +19,18 @@ spring:
         namespace: 18c8053c-9797-4f43-9d5f-06c77ea10222
     profiles:
       active: dev
+  datasource:
+    name: db-base
+    url: jdbc:mysql://localhost:3306/cloudall?serverTimezone=GMT%2B8
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+    hibernate:
+      ddl-auto: update
   main:
     allow-bean-definition-overriding: true
-logging:
-  file:
-    path: F:\myself\project\alibabaclouddev\log\${spring.application.name}
-  config: classpath:logback-spring.xml

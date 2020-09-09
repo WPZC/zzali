@@ -10,12 +10,12 @@ spring:
       discovery:
         server-addr: localhost:8848
         #此处的namespace是discovery服务对应的命名空间，与config不同
-        #namespace: b7d26021-28b5-42d1-b36d-737a818a2146
+        namespace: 18c8053c-9797-4f43-9d5f-06c77ea10222
       config:
         server-addr: localhost:8848
         file-extension: yaml
         #此处只是对应config的命名空间
-        #namespace: b7d26021-28b5-42d1-b36d-737a818a2146
+        namespace: 18c8053c-9797-4f43-9d5f-06c77ea10222
     gateway:
       discovery:
         locator:

@@ -1,6 +1,6 @@
 package com.zz.security.domain;
 
-import com.zz.region.domain.authority.RoleEntity;
+import com.zz.region.domain.authority.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,7 +25,7 @@ public class AuthUser implements UserDetails {
  
     private String username;
     private String password;
-    private List<RoleEntity> roles;
+    private List<Role> roles;
  
  
     @Override

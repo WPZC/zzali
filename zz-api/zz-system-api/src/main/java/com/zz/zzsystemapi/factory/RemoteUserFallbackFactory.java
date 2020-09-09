@@ -1,12 +1,13 @@
 package com.zz.zzsystemapi.factory;
 
 import com.zz.region.domain.PageData;
-import com.zz.region.domain.authority.RoleEntity;
-import com.zz.region.domain.authority.UserEntity;
+import com.zz.region.domain.authority.Role;
+import com.zz.region.domain.authority.User;
 import com.zz.region.vo.ResultVO;
 import com.zz.zzsystemapi.service.UserMangementFegin;
 import feign.hystrix.FallbackFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * 用户服务降级处理
@@ -23,32 +24,11 @@ public class RemoteUserFallbackFactory implements FallbackFactory<UserMangementF
         {
 
             @Override
-            public UserEntity findByUserName(String username) {
+            public User findByUserName(String username,String encode) {
                 return null;
             }
-
             @Override
-            public ResultVO<String> addUser(UserEntity userEntity, Long roleId) {
-                return null;
-            }
-
-            @Override
-            public ResultVO<String> updateUser(UserEntity userEntity, Long roleId) {
-                return null;
-            }
-
-            @Override
-            public ResultVO<PageData<UserEntity>> findByPage(Integer currentPage) {
-                return null;
-            }
-
-            @Override
-            public ResultVO<String> deleteByuId(Long id) {
-                return null;
-            }
-
-            @Override
-            public RoleEntity oleRole(Long id) {
+            public Role oleRole(Long id,String encode) {
                 return null;
             }
         };

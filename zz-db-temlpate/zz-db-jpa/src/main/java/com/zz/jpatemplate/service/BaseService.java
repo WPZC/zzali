@@ -1,7 +1,6 @@
 package com.zz.jpatemplate.service;
 
 import com.zz.jpatemplate.dao.BaseDao;
-import com.zz.jpatemplate.domain.BaseDoMain;
 import com.zz.region.domain.PageData;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,7 +23,7 @@ import java.util.List;
  * @version 1.0
  * @date 2020/8/10 16:04
  */
-public abstract class BaseService<T extends BaseDoMain,K extends BaseDao>{
+public abstract class BaseService<T,K extends BaseDao>{
 
 
     /**

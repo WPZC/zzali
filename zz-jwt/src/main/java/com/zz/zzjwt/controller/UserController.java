@@ -1,8 +1,9 @@
 package com.zz.zzjwt.controller;
 
-import com.zz.region.domain.authority.RoleEntity;
-import com.zz.region.domain.authority.UserEntity;
+import com.zz.region.domain.authority.Role;
+import com.zz.region.domain.authority.User;
 import com.zz.region.methods.Backtrack;
+import com.zz.region.methods.ead.EAD;
 import com.zz.region.vo.ResultVO;
 import com.zz.security.service.CustomUserDetailsServiceImpl;
 import com.zz.security.utils.jwt.JwtUtil;
@@ -46,7 +47,7 @@ public class UserController{
             return Backtrack.errot("用户名不能为空");
         }
 
-        UserEntity user = customUserDetailsService.findByUserName(username);
+        User user = customUserDetailsService.findByUserName(username, EAD.encode());
 
         if (user == null || !user.getPassword().equals(password)) {
             return Backtrack.errot("用户名或密码错误");
@@ -56,7 +57,7 @@ public class UserController{
         //ResultVO<Object> success = new ResultVO<>();
         //用户名密码正确，生成token给客户端
         //success.setCode(0);
-        List<RoleEntity> roles = customUserDetailsService.findByUserRole(user.getId());
+        List<Role> roles = customUserDetailsService.findByUserRole(user.getId());
         //success.setData(JwtUtil.generateToken(username, roles));
 
         return Backtrack.success(JwtUtil.generateToken(username, roles),null);

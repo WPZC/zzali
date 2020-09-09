@@ -23,41 +23,6 @@ public class RemoteMenuFallbackFactory implements FallbackFactory<MenuMangementF
         return new MenuMangementFegin()
         {
 
-
-            @Override
-            public ResultVO<String> addMenu(Menu menu) {
-                return null;
-            }
-
-            @Override
-            public ResultVO<String> findByMenuMaxMenuCode(String menuCode) {
-                return null;
-            }
-
-            @Override
-            public ResultVO<Integer> updateMenu(String menuCode, String menuName, String router, String imgsrc) {
-                return null;
-            }
-
-            @Override
-            public ResultVO<Boolean> findByMenuIsBind(String menuCode) {
-                return null;
-            }
-
-            @Override
-            public ResultVO<Integer> deleteMenu(String menuCode) {
-                return null;
-            }
-
-            @Override
-            public ResultVO<List<Menu>> getMenus() {
-                return null;
-            }
-
-            @Override
-            public ResultVO<PageData<Menu>> getMenuMsgs(Integer currentPage) {
-                return null;
-            }
         };
     }
 }

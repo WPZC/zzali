@@ -1,6 +1,6 @@
 package com.zz.security.utils.jwt;
 
-import com.zz.region.domain.authority.RoleEntity;
+import com.zz.region.domain.authority.Role;
 import com.zz.security.domain.AuthUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -23,9 +23,9 @@ public class JwtUtil{
      * @param roles
      * @return
      */
-    public static String generateToken(String username,List<RoleEntity> roles) {
+    public static String generateToken(String username,List<Role> roles) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("roles", roles.parallelStream().map(RoleEntity::getName).collect(Collectors.joining(",")));
+        claims.put("roles", roles.parallelStream().map(Role::getName).collect(Collectors.joining(",")));
  
         return Jwts.builder()
                 .setClaims(claims)
@@ -57,7 +57,7 @@ public class JwtUtil{
  
         //因为生成的时候没有放入密码，所以不需要密码
         return new AuthUser(username, null, Arrays.stream(roles.split(",")).map(name -> {
-            RoleEntity role = new RoleEntity();
+            Role role = new Role();
             role.setName(name);
             return role;
         }).collect(Collectors.toList()));

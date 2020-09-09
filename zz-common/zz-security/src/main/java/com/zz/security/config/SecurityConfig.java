@@ -68,6 +68,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/v2/api-docs"
                         )
         .antMatchers(HttpMethod.POST,
-                "/token");
+                "/token",
+                "/ac/**");
     }
 }
