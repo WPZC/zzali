@@ -3,6 +3,7 @@ package com.zz.region.methods.ead;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
+ * security加解密工具
  * @author wqy
  * @version 1.0
  * @date 2020/9/9 14:59

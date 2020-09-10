@@ -22,6 +22,11 @@
             <artifactId>zz-security</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>com.zz</groupId>
+            <artifactId>zz-http-okhttps-gson</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -1,0 +1,28 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>zz-http</artifactId>
+        <groupId>com.zz</groupId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>zz-http-okhttps-gson</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.zz</groupId>
+            <artifactId>zz-http-okhttps</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+	    <dependency>
+		    <groupId>com.google.code.gson</groupId>
+		    <artifactId>gson</artifactId>
+		    <version>2.8.6</version>
+		</dependency>
+    </dependencies>
+
+	<build>
+		<finalName>zz-http-okhttps-gson</finalName>
+	</build>
+</project>

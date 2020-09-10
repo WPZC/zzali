@@ -8,8 +8,9 @@
         + zz-excel #excel公共模块，提供excel读写操作，包含web等
     + zz-redis #redis封装类，含有redis基础操作
     + zz-security #鉴权核心模块，基本所有controller都需要引入，进行统一的安全认证
-+ zz-db #db服务模块，供zz-system-api等模块调用
-    + zz-api-authority #权限，用户等基础db模块
+    + zz-http #http请求模块
+        + zz-http-okhttps #http核心代码
+        + zz-http-okhttps-gson #采用GSON作为解析的http请求工具，参考文档http://okhttps.ejlchina.com/v2/foundation.html   
 + zz-db-template #db公共模块 数据库操作公共库，类似JPA，mybatis的常规操作的封装。
     + zz-db-jpa #jpa封装注解，jpa基本操作，以及复杂查询简单封装，
 + zz-gateway #网关服务，结合了sentinel限流

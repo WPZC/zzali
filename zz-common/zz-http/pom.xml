@@ -3,21 +3,18 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>zzali</artifactId>
+        <artifactId>zz-common</artifactId>
         <groupId>com.zz</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>zz-common</artifactId>
+    <artifactId>zz-http</artifactId>
     <packaging>pom</packaging>
+
     <modules>
-        <module>zz-security</module>
-        <module>zz-common-region</module>
-        <module>zz-log</module>
-        <module>zz-redis</module>
-        <module>zz-office</module>
-        <module>zz-http</module>
+        <module>zz-http-okhttps</module>
+        <module>zz-http-okhttps-gson</module>
     </modules>
 
 
