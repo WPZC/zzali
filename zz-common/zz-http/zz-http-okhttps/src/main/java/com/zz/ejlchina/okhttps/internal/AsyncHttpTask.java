@@ -252,6 +252,7 @@ public class AsyncHttpTask extends HttpTask<AsyncHttpTask> {
     	}
     	PreHttpCall call = new PreHttpCall();
 		registeTagTask(call);
+		//此处提交任务
     	httpClient.preprocess(this, () -> {
     		synchronized (call) {
     			if (call.canceled) {
@@ -260,6 +261,8 @@ public class AsyncHttpTask extends HttpTask<AsyncHttpTask> {
     				if (onResponse != null || onResBody != null) {
     					tag(CopyInterceptor.TAG);
 					}
+    				//发起请求，该executeCall方法中含有之前设置的IOException和OnResponse回调
+					//setCall线程减1
 					call.setCall(executeCall(prepareCall(method)));
 				}
 			}

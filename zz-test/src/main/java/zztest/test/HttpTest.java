@@ -21,13 +21,13 @@ public class HttpTest {
                 .addMsgConvertor(new GsonMsgConvertor())
                 .build();
 
-        ResultVO resultVO = new ResultVO<String>();
-        resultVO = http.sync("").get().getBody().toBean(resultVO.getClass());
+        //ResultVO resultVO = new ResultVO<String>();
+        //resultVO = http.sync("").get().getBody().toBean(resultVO.getClass());
         http.async("").setOnResponse(r->{
             System.out.println("回调了");
         }).setOnException((IOException r)->{})
                 .get();
-        System.out.println(resultVO);
+        System.out.println("执行完毕");
     }
 
 }
