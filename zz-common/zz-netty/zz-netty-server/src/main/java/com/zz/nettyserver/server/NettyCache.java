@@ -21,10 +21,6 @@ public class NettyCache {
     private String name;
     //通道控制权
     private ChannelFuture channelFuture;
-    //监听端口，接受新连接的线程组
-    private NioEventLoopGroup bossGroup;
-    //处理每一条连接的数据读写的线程组
-    private NioEventLoopGroup workerGroup;
 
     /**
      * 关闭

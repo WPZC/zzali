@@ -214,7 +214,7 @@ public interface NettyServer {
                 //随后，调用它的同步阻塞方法sync等待绑定操作完成。
                 //完成之后Netty会返回一个ChannelFuture，它的功能类似于JDK的java.util.concurrent.Future，主要用于异步操作的通知回调。
                 ChannelFuture f = this.serverBootstrap.bind(port).sync();
-                NettyCache cache = NettyCache.builder().bossGroup(bossGroup).channelFuture(f).workerGroup(workerGroup).name(nettyName).build();
+                NettyCache cache = NettyCache.builder().channelFuture(f).name(nettyName).build();
                 NETTY_CACHE_HASH_MAP.put(nettyName, cache);
                 //等待服务端监听端口关闭
                 //使用f.channel().closeFuture().sync()方法进行阻塞,等待服务端链路关闭之后main函数才退出。

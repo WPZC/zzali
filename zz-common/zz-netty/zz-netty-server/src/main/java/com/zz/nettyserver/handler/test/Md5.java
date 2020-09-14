@@ -11,7 +11,7 @@ public class Md5 {
 	 * 
 	 * 说明：32位加密算法
 	 * 
-	 * @param 待加密的数据
+	 * @param  //待加密的数据
 	 * @return 加密结果，全小写的字符串
 	 */
 	public static String MD5(String s) {

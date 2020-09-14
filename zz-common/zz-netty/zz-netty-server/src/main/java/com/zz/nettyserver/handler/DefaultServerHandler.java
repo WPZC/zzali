@@ -6,17 +6,14 @@ import com.zz.nettyserver.handler.test.Md5;
 import com.zz.nettyserver.handler.test.PostServer;
 import com.zz.nettyserver.utils.HexByte;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.internal.StringUtil;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
-
-import java.io.PrintWriter;
-import java.nio.charset.Charset;
 import java.util.Date;
 
 /**
+ * 默认逻辑处理器
+ * ChannelInboundHandlerAdapter为netty的逻辑处理器
  * @author wqy
  * @version 1.0
  * @date 2020/9/12 9:13
