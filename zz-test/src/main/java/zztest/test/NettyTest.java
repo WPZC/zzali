@@ -2,6 +2,13 @@ package zztest.test;
 
 import com.zz.nettyserver.server.NettyServer;
 import com.zz.region.methods.thread.ThreadFactory;
+import io.netty.channel.ChannelOption;
+import zztest.test.encode.PacketTestEntityEcoder;
+import zztest.test.decode.PacketServerDecode;
+import zztest.test.encode.PcaketStringEcoder;
+import zztest.test.logic.LogicServerHanlder;
+import zztest.test.read.SimpleStringHandler;
+import zztest.test.read.SimpleTestEntityHandler;
 
 /**
  * @author wqy
@@ -21,7 +28,18 @@ public class NettyTest {
             @Override
             public void run() {
                 try {
-                    NettyServer.bulider().bulid().start(5555, "测试");
+                    NettyServer.
+                            bulider()
+                            .option(ChannelOption.SO_RCVBUF, Integer.MAX_VALUE)
+                            .childOption(ChannelOption.SO_KEEPALIVE, true)
+                            .addHandler(PacketServerDecode.class)
+                            .addHandler(LogicServerHanlder.class)
+                            .addHandler(SimpleStringHandler.class)
+                            .addHandler(SimpleTestEntityHandler.class)
+                            .addHandler(PcaketStringEcoder.class)
+                            .addHandler(PacketTestEntityEcoder.class)
+                            .bulid()
+                            .start(5555, "测试");
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

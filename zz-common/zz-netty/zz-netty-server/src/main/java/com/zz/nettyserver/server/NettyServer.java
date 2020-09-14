@@ -7,6 +7,7 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.AttributeKey;
@@ -55,7 +56,7 @@ public interface NettyServer {
         //为服务端channel(NioServerSocketChannel)设置一些属性
         private final Map<ChannelOption<?>, Object> options = new LinkedHashMap();
         //逻辑handler
-        List<ChannelHandler> channelHandlers = new ArrayList<>();
+        List<Class<ChannelHandler>> channelHandlers = new ArrayList<>();
 
         public Bulider(){
             this.bossGroup = new NioEventLoopGroup();
@@ -131,13 +132,14 @@ public interface NettyServer {
          * @param handler
          * @return
          */
-        public Bulider addHandler(ChannelHandler handler){
+        public Bulider addHandler(Class handler){
             this.channelHandlers.add(handler);
             return this;
         }
 
         /**
-         * 构建自定义处理器，按顺序构建
+         * 构建自定义处理器，按顺序构建,初始通道，此处改为c.newInstance(),
+         * 是因我每一个连接都会对应一个初始化
          * @return
          */
         private ChannelInitializer buliderHandler(){
@@ -147,7 +149,15 @@ public interface NettyServer {
                     if(ObjectUtils.isEmpty(channelHandlers)){
                         ch.pipeline().addLast(new DefaultServerHandler());
                     }else{
-                        channelHandlers.stream().forEach(c->{ch.pipeline().addLast(c);});
+                        channelHandlers.stream().forEach(c->{
+                            try {
+                                ch.pipeline().addLast(c.newInstance());
+                            } catch (InstantiationException e) {
+                                e.printStackTrace();
+                            } catch (IllegalAccessException e) {
+                                e.printStackTrace();
+                            }
+                        });
                     }
 
                 }
