@@ -1,15 +1,10 @@
 package com.zz.zzsystemapi.service;
 
-import com.zz.region.ServiceNameConstants;
-import com.zz.region.domain.PageData;
-import com.zz.region.domain.authority.Menu;
-import com.zz.region.domain.authority.Role;
-import com.zz.region.domain.authority.RoleMenu;
-import com.zz.region.vo.ResultVO;
+import com.zz.ServiceNameConstants;
+import com.zz.domain.authority.Role;
 import com.zz.zzsystemapi.factory.RemoteRoleFallbackFactory;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -28,6 +23,6 @@ public interface RoleMangementFegin {
      * @return
      */
     @PostMapping(value = "/ac/findByUserRole")
-    List<Role> findByUserRole(@RequestParam("id") Long id,@RequestParam("encode") String encode);
+    List<Role> findByUserRole(@RequestParam("id") Long id, @RequestParam("encode") String encode);
 
 }

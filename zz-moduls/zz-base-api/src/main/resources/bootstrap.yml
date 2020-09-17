@@ -17,8 +17,6 @@ spring:
         file-extension: yaml
         #此处只是对应config的命名空间
         namespace: 18c8053c-9797-4f43-9d5f-06c77ea10222
-    profiles:
-      active: dev
   datasource:
     name: db-base
     url: jdbc:mysql://localhost:3306/cloudall?serverTimezone=GMT%2B8
@@ -34,3 +32,6 @@ spring:
       ddl-auto: update
   main:
     allow-bean-definition-overriding: true
+  profiles:
+    active: dev
+

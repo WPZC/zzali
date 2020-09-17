@@ -1,7 +1,7 @@
 package com.zz.security.access;
  
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zz.region.vo.ResultVO;
+import com.zz.domain.ResultVO;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Component;
 

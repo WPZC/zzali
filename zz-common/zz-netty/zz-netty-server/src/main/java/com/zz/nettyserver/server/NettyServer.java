@@ -7,7 +7,6 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.AttributeKey;
@@ -57,6 +56,9 @@ public interface NettyServer {
         private final Map<ChannelOption<?>, Object> options = new LinkedHashMap();
         //逻辑handler
         List<Class<ChannelHandler>> channelHandlers = new ArrayList<>();
+        
+        //粘包拆包器
+        private ChannelHandler stickyPackageUnpacking = null;
 
         public Bulider(){
             this.bossGroup = new NioEventLoopGroup();
@@ -138,6 +140,16 @@ public interface NettyServer {
         }
 
         /**
+         * 添加拆包粘包器
+         * @param stickyPackageUnpacking
+         * @return
+         */
+        public Bulider addStickyPackageUnpacking(ChannelHandler stickyPackageUnpacking){
+            this.stickyPackageUnpacking = stickyPackageUnpacking;
+            return this;
+        }
+
+        /**
          * 构建自定义处理器，按顺序构建,初始通道，此处改为c.newInstance(),
          * 是因我每一个连接都会对应一个初始化
          * @return
@@ -149,6 +161,10 @@ public interface NettyServer {
                     if(ObjectUtils.isEmpty(channelHandlers)){
                         ch.pipeline().addLast(new DefaultServerHandler());
                     }else{
+                        //判断是否含有粘包拆包器，有的话加在第一个
+                        if (stickyPackageUnpacking!=null){
+                            ch.pipeline().addLast(stickyPackageUnpacking);
+                        }
                         channelHandlers.stream().forEach(c->{
                             try {
                                 ch.pipeline().addLast(c.newInstance());

@@ -1,5 +1,6 @@
 package com.zz.security.annotation;
 
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 import java.lang.annotation.*;
@@ -13,6 +14,7 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
+@EntityScan(basePackages={"com.zz.domain.*"})
 @EnableFeignClients
 public @interface EnableZzFeignClients
 {

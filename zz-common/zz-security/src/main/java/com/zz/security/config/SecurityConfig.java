@@ -1,6 +1,7 @@
 package com.zz.security.config;
 
 import com.zz.security.filter.JwtTokenFilter;
+import com.zz.security.utils.CustomerParams;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -14,6 +15,8 @@ import com.zz.security.access.AccessDeniedHandler;
 import com.zz.security.access.TokenExceptionHandler;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * security配置
@@ -34,7 +37,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private AccessDeniedHandler accessDeniedHandler;
     @Resource
     private JwtTokenFilter jwtTokenFilter;
- 
+    @Resource
+    private CustomerParams customerParams;
+
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
@@ -42,21 +47,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 // 添加异常处理，以及访问禁止（无权限）处理
                 .exceptionHandling().authenticationEntryPoint(tokenExceptionHandler).accessDeniedHandler(accessDeniedHandler).and()
- 
+
                 // 我们不再需要session了
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
- 
+
                 //定义拦截页面，所有api全部需要认证
                 .authorizeRequests()
- 
+
                 .anyRequest().authenticated();
- 
+
         //最后，我们定义 filter，用来替换原来的UsernamePasswordAuthenticationFilter
         httpSecurity.addFilterAt(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
     }
- 
+
     @Override
     public void configure(WebSecurity web) {
+        //get默认配置
         web.ignoring()
                 // 让我们获取 token的api不走springsecurity的过滤器，大道开放
                 .antMatchers(HttpMethod.GET,
@@ -65,10 +71,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/resources/**",
                         "/swagger-ui.html",
                         "/swagger-resources/**",
-                        "/v2/api-docs"
-                        )
-        .antMatchers(HttpMethod.POST,
-                "/token",
-                "/ac/**");
+                        "/v2/api-docs");
+        //post默认配置
+        web.ignoring().antMatchers(HttpMethod.POST,
+                "/token");
+
+        if(customerParams.isGet()&&null!=customerParams.getRoutes()){
+            web.ignoring()
+                    // 让我们获取 token的api不走springsecurity的过滤器，大道开放
+                    .antMatchers(HttpMethod.GET,
+                            customerParams.getRoutes());
+        }
+        if(customerParams.isPost()&&null!=customerParams.getRoutes()){
+            web.ignoring().antMatchers(HttpMethod.POST,
+                    customerParams.getRoutes());
+        }
     }
 }

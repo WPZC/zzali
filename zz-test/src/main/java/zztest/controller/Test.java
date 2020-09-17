@@ -1,8 +1,12 @@
 package zztest.controller;
 
+import com.google.gson.Gson;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author wqy
@@ -23,7 +27,17 @@ public class Test {
             s = s + i;
         }
 
+        List<List<List<String>>> lists = new ArrayList<>();
+
+        Gson gson = new Gson();
+
+        gson.fromJson("",lists.getClass());
+
         return "这是test服务";
+
+
+
+
 
     }
 

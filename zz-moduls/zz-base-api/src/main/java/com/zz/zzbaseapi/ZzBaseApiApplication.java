@@ -14,7 +14,6 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableZzFeignClients
-@EntityScan(basePackages={"com.zz.*.domain"})
 public class ZzBaseApiApplication {
 
     public static void main(String[] args) {

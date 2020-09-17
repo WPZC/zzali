@@ -1,17 +1,8 @@
 package com.zz.zzsystemapi.service;
 
-import com.zz.region.ServiceNameConstants;
-import com.zz.region.domain.PageData;
-import com.zz.region.domain.authority.Menu;
-import com.zz.region.vo.ResultVO;
+import com.zz.ServiceNameConstants;
 import com.zz.zzsystemapi.factory.RemoteMenuFallbackFactory;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.List;
 
 /**
  * 菜单fegin  （调用指定的数据源）

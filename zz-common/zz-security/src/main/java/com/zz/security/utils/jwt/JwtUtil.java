@@ -1,6 +1,7 @@
 package com.zz.security.utils.jwt;
 
-import com.zz.region.domain.authority.Role;
+import com.zz.domain.authority.Role;
+import com.zz.region.methods.ead.EAD;
 import com.zz.security.domain.AuthUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

@@ -1,7 +1,7 @@
 package com.zz.security.service;
 
-import com.zz.region.domain.authority.Role;
-import com.zz.region.domain.authority.User;
+import com.zz.domain.authority.Role;
+import com.zz.domain.authority.User;
 import com.zz.region.methods.ead.EAD;
 import com.zz.security.domain.AuthUser;
 import com.zz.zzsystemapi.service.RoleMangementFegin;

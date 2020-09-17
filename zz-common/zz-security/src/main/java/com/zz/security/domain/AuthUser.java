@@ -1,6 +1,6 @@
 package com.zz.security.domain;
 
-import com.zz.region.domain.authority.Role;
+import com.zz.domain.authority.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

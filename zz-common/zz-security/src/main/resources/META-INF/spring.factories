@@ -1,8 +1,10 @@
-#Ô¤¼ÓÔØ£¬¸ÃÄ£¿éÎªÈ¨ÏŞ°æÈ¨£¬²»º¬Æô¶¯Àà£¬ËùÒÔĞèÒª¼ÓÔØÉ¨Ãè²»µ½µÄÀà
+#é¢„åŠ è½½ï¼Œè¯¥æ¨¡å—ä¸ºæƒé™ç‰ˆæƒï¼Œä¸å«å¯åŠ¨ç±»ï¼Œæ‰€ä»¥éœ€è¦åŠ è½½æ‰«æä¸åˆ°çš„ç±»
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.zz.security.service.CustomUserDetailsServiceImpl,\
   com.zz.security.filter.JwtTokenFilter,\
   com.zz.security.access.AccessDeniedHandler,\
   com.zz.security.access.TokenExceptionHandler,\
   com.zz.security.config.SecurityConfig,\
-  com.zz.security.service.PermissionService
+  com.zz.security.service.PermissionService,\
+  com.zz.security.exception.ControllerException,\
+  com.zz.security.utils.CustomerParams

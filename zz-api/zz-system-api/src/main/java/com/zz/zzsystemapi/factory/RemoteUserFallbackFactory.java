@@ -1,9 +1,7 @@
 package com.zz.zzsystemapi.factory;
 
-import com.zz.region.domain.PageData;
-import com.zz.region.domain.authority.Role;
-import com.zz.region.domain.authority.User;
-import com.zz.region.vo.ResultVO;
+import com.zz.domain.authority.Role;
+import com.zz.domain.authority.User;
 import com.zz.zzsystemapi.service.UserMangementFegin;
 import feign.hystrix.FallbackFactory;
 import org.springframework.stereotype.Component;
@@ -24,11 +22,11 @@ public class RemoteUserFallbackFactory implements FallbackFactory<UserMangementF
         {
 
             @Override
-            public User findByUserName(String username,String encode) {
+            public User findByUserName(String username, String encode) {
                 return null;
             }
             @Override
-            public Role oleRole(Long id,String encode) {
+            public Role oleRole(Long id, String encode) {
                 return null;
             }
         };

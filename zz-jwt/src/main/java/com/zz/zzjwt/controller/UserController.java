@@ -1,10 +1,10 @@
 package com.zz.zzjwt.controller;
 
-import com.zz.region.domain.authority.Role;
-import com.zz.region.domain.authority.User;
-import com.zz.region.methods.Backtrack;
+import com.zz.Backtrack;
+import com.zz.domain.ResultVO;
+import com.zz.domain.authority.Role;
+import com.zz.domain.authority.User;
 import com.zz.region.methods.ead.EAD;
-import com.zz.region.vo.ResultVO;
 import com.zz.security.service.CustomUserDetailsServiceImpl;
 import com.zz.security.utils.jwt.JwtUtil;
 import io.swagger.annotations.Api;
@@ -40,7 +40,6 @@ public class UserController{
     @RequestMapping(value = "/token",method = {RequestMethod.POST,RequestMethod.GET})
     @ResponseBody
     public ResultVO<String> login(@RequestParam String username, @RequestParam String password) {
-
         System.out.println("获取token");
 
         if(null==username||username.equals("")){

@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>com.zz</groupId>
-            <artifactId>zz-common-region</artifactId>
+            <artifactId>zz-domain-authority</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
