@@ -5,8 +5,10 @@ import com.zz.domain.PageData;
 import com.zz.domain.ResultVO;
 import com.zz.domain.authority.Role;
 import com.zz.domain.authority.User;
+import com.zz.jpatemplate.controller.BaseController;
 import com.zz.security.utils.jwt.JwtUtil;
 import com.zz.zzbaseapi.base.service.UserService;
+import com.zz.zzbaseapi.base.service.impl.UserServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -29,7 +31,7 @@ import java.util.Date;
 @Api(tags = "用户管理")
 @Controller
 @RequestMapping(value = "/uct")
-public class UserBaseController {
+public class UserBaseController extends BaseController<User, UserServiceImpl> {
 
     @Autowired
     private UserService userService;

@@ -1,0 +1,24 @@
+server:
+  port: 10501
+  tomcat:
+    uri-encoding: UTF-8
+spring:
+  application:
+    name: zz-jwt
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+        #此处的namespace是discovery服务对应的命名空间，与config不同
+        namespace: 18c8053c-9797-4f43-9d5f-06c77ea10222
+      config:
+        server-addr: localhost:8848
+        file-extension: yaml
+        #此处只是对应config的命名空间
+        namespace: 18c8053c-9797-4f43-9d5f-06c77ea10222
+  main:
+    allow-bean-definition-overriding: true
+logging:
+  file:
+    path: F:\myself\project\alibabaclouddev\log\${spring.application.name}
+  config: classpath:logback-spring.xml

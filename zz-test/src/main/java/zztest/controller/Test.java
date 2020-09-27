@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping(value = "/test")
-public class Test {
+public class Test{
 
     @RequestMapping(value = "/te")
     @ResponseBody

@@ -1,0 +1,32 @@
+server:
+  port: 10503
+spring:
+  application:
+    name: zz-gateway
+  main:
+    allow-bean-definition-overriding: true
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+        #此处的namespace是discovery服务对应的命名空间，与config不同
+        namespace: 18c8053c-9797-4f43-9d5f-06c77ea10222
+      config:
+        server-addr: localhost:8848
+        file-extension: yaml
+        #此处只是对应config的命名空间
+        namespace: 18c8053c-9797-4f43-9d5f-06c77ea10222
+    gateway:
+      discovery:
+        locator:
+          #表示将请求路径的服务名配置改成小写  因为服务注册的时候，向注册中心注册时将服务名转成大写的了
+          lowerCaseServiceId: true
+          #表示gateway开启服务注册和发现功能,
+          #并且spring cloud gateway自动根据服务发现为每一个服务创建了一个router，这个router将以服务名开头的请求路径转发到对应的服务
+          enabled: true
+      httpclient:
+        response-timeout: 5000
+        connect-timeout: 5000
+ribbon:
+  ReadTimeout: 120000
+  ConnectTimeout: 120000
