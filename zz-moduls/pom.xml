@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>zz-base-api</module>
+        <module>zz-logserver</module>
     </modules>
 
 

@@ -1,7 +1,13 @@
 package zztest.controller;
 
 import com.google.gson.Gson;
+import com.zz.KafkaProducer;
+import com.zz.vo.SendData;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -16,6 +22,22 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "/test")
 public class Test{
+
+    @Autowired
+    private KafkaProducer kafkaProducer;
+
+    // 发送消息
+    @GetMapping("/kafka/normal/{message}")
+    @ResponseBody
+    public void sendMessage1(@PathVariable("message") String normalMessage) {
+
+        SendData<String> stringSendData = new SendData<>("topic.test",null);
+
+        stringSendData.setData("这是一个测试数据");
+        stringSendData.setTopic("topic.test");
+
+        kafkaProducer.sendMsg(stringSendData);
+    }
 
     @RequestMapping(value = "/te")
     @ResponseBody

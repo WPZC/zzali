@@ -1,11 +1,16 @@
 package com.zz.zzbaseapi.base.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.zz.KafkaProducer;
 import com.zz.domain.PageData;
 import com.zz.domain.authority.Role;
 import com.zz.domain.authority.User;
 import com.zz.domain.authority.UserRole;
 import com.zz.jpatemplate.dao.BaseDao;
 import com.zz.jpatemplate.service.BaseService;
+import com.zz.security.utils.SecurityUtils;
+import com.zz.vo.SendData;
+import com.zz.zzbaseapi.domain.log.LogInfo;
 import com.zz.zzbaseapi.repository.RoleJpa;
 import com.zz.zzbaseapi.repository.UserJpa;
 import com.zz.zzbaseapi.repository.UserRoleJpa;
@@ -25,6 +30,8 @@ public class UserServiceImpl extends BaseService<User,UserJpa> implements UserSe
     private UserRoleJpa userRoleJpa;
     @Autowired
     private RoleJpa roleJpa;
+    @Autowired
+    private KafkaProducer kafkaProducer;
 
     /**
      * 注入仓库位置
@@ -153,6 +160,11 @@ public class UserServiceImpl extends BaseService<User,UserJpa> implements UserSe
 
     @Override
     public User findByUserName(String username) {
+
+        Thread t = Thread.currentThread();
+        StackTraceElement[] s = t.getStackTrace();
+
+        kafkaProducer.sendMsg(new SendData<>("topic.user",new LogInfo(username)));
         return userJpa.findByUsername(username);
     }
 

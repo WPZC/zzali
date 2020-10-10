@@ -1,15 +1,22 @@
 package com.zz.zzbaseapi.base.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.zz.KafkaProducer;
 import com.zz.domain.PageData;
 import com.zz.domain.authority.Menu;
 import com.zz.jpatemplate.dao.BaseDao;
 import com.zz.jpatemplate.service.BaseService;
 import com.zz.region.methods.utils.StringUtil;
 import com.zz.region.methods.utils.Utils;
+import com.zz.security.utils.SecurityUtils;
+import com.zz.vo.SendData;
+import com.zz.zzbaseapi.domain.log.LogInfo;
 import com.zz.zzbaseapi.repository.MenuJpa;
 import com.zz.zzbaseapi.base.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 /**
  * 菜单模块
@@ -22,6 +29,9 @@ public class MenuServiceImpl extends BaseService<Menu, MenuJpa> implements MenuS
 
     @Autowired
     private MenuJpa menuJpa;
+
+    @Autowired
+    private KafkaProducer kafkaProducer;
 
     /**
      * 注入仓库位置

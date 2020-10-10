@@ -11,6 +11,7 @@
         <module>zz-api</module>
         <module>zz-db-temlpate</module>
         <module>zz-moduls</module>
+        <module>zz-alltest</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

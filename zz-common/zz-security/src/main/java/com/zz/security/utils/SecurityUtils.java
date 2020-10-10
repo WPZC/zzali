@@ -25,7 +25,7 @@ public class SecurityUtils
      */
     public static String getUsername()
     {
-        return getLoginUser().getUsername();
+        return getLoginUser()==null?"用户登陆":getLoginUser().getUsername();
     }
 
     /**

@@ -106,10 +106,10 @@ public class GatewayConfiguration {
         Set<GatewayFlowRule> rules = new HashSet<>();
         //GatewayFlowRule：网关限流规则，针对 API Gateway 的场景定制的限流规则，
         // 可以针对不同 route 或自定义的 API 分组进行限流，支持针对请求中的参数、Header、来源 IP 等进行定制化的限流。
-        rules.add(new GatewayFlowRule("zz-test")
-            .setCount(1)
-            .setIntervalSec(1)
-        );
+//        rules.add(new GatewayFlowRule("zz-test")
+//            .setCount(1)
+//            .setIntervalSec(1)
+//        );
         rules.add(new GatewayFlowRule("zz-jwt")
                 .setCount(1)
                 .setIntervalSec(1)

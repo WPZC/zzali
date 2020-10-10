@@ -20,6 +20,7 @@
         <module>zz-http</module>
         <module>zz-netty</module>
         <module>zz-domain</module>
+        <module>zz-mq</module>
     </modules>
 
 
