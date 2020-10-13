@@ -1,7 +1,6 @@
 package com.zz;
 
 import com.alibaba.fastjson.JSONObject;
-import com.sun.istack.internal.NotNull;
 import com.zz.vo.SendData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,6 @@ public class KafkaProducer {
     @Autowired
     private KafkaTemplate<String, Object> kafkaTemplate;
 
-    @NotNull
     public <T> void  sendMsg(SendData<T> sendData) {
         Assert.notNull(sendData.getTopic(),"topic不能为空！！！！");
 
