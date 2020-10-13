@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>zz-db-jpa</module>
+        <module>zz-db-tkmybatis</module>
     </modules>
 
     <dependencies>

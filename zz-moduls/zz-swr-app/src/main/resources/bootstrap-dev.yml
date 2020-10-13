@@ -1,10 +1,11 @@
 server:
-  port: 10501
+  port: 10506
   tomcat:
     uri-encoding: UTF-8
+
 spring:
   application:
-    name: zz-jwt
+    name: zz-swr-app
   cloud:
     nacos:
       discovery:
@@ -16,9 +17,3 @@ spring:
         file-extension: yaml
         #此处只是对应config的命名空间
         namespace: 09740bb3-4ee5-45f8-a5f2-f24d7cd96288
-  main:
-    allow-bean-definition-overriding: true
-logging:
-  file:
-    path: F:\myself\project\alibabaclouddev\log\${spring.application.name}
-  config: classpath:logback-spring.xml

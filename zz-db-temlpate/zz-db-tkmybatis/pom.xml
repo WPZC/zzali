@@ -3,19 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>zzali</artifactId>
+        <artifactId>zz-db-temlpate</artifactId>
         <groupId>com.zz</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>zz-moduls</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>zz-base-api</module>
-        <module>zz-logserver</module>
-        <module>zz-swr-app</module>
-    </modules>
+    <artifactId>zz-db-tkmybatis</artifactId>
 
 
 </project>
