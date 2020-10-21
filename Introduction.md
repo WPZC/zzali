@@ -6,6 +6,8 @@
     + zz-domain #实体类管理
         + zz-domain-authotiry #权限实体类
         + zz-domain-common #公共类
+    + zz-group #组合模块，有的业务需要组合装模封装
+        + zz-security-logs #安全+日志组合模块，由于日志需要kafka和当前用户，所以组合在一起进行封装
     + zz-log #日志公共模块，目前没太好的想法，没写
     + zz-office #office模块
         + zz-excel #excel公共模块，提供excel读写操作，包含web等
@@ -32,3 +34,7 @@
     1. 修改实体类存放结构，新增zz-domain模块，存放所有实体类，便于共享和管理，zz-domain下有两个模块，一个是公共类，一个是权限类，
        公共类存放类似ResultVo，BaseDoMain等公用实体类，权限类为基础服务所用的模块。
     2. 修改zz-secutiry，新增自定义配置，详情见zz-secutiry文档更细。
+
+2020-10-20:
+    1. 完成基于kafka的日志服务和模块，完成基于kafka的消费者和服务者的简单封装。
+    2. 新增zz-group,由于有的模块需要引入两个模块，而且两个模块之间需要一些共同参数的配置，所以创建了zz-group
