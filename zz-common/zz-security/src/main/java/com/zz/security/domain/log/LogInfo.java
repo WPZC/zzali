@@ -1,15 +1,9 @@
-package com.zz.zzbaseapi.domain.log;
+package com.zz.security.domain.log;
 
 import com.zz.security.utils.SecurityUtils;
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Builder;
 import lombok.Data;
-import lombok.experimental.Tolerate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import java.util.Date;
 
 /**
@@ -20,7 +14,7 @@ import java.util.Date;
  */
 @Data
 @ApiModel(value = "日志信息")
-public class LogInfo {
+public class LogInfo<T> {
     /**
      * 用户ID
      */
@@ -39,7 +33,7 @@ public class LogInfo {
     /**
      * 参数
      */
-    private String params;
+    private T params;
 
     /**
      * 是否成功(0成功，1失败)
@@ -51,7 +45,12 @@ public class LogInfo {
      */
     private Date operationTime = new Date();
 
-    public LogInfo(String params){
+    /**
+     * 异常信息
+     */
+    private String ex;
+
+    public LogInfo(T params){
         this.params = params;
     }
 

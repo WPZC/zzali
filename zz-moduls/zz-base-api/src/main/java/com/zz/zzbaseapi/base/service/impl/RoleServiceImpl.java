@@ -1,11 +1,16 @@
 package com.zz.zzbaseapi.base.service.impl;
 
+import com.zz.KafkaProducer;
+import com.zz.aop.anntation.KafkaSendLog;
+import com.zz.aop.topic.TopicType;
 import com.zz.domain.PageData;
 import com.zz.domain.authority.Menu;
 import com.zz.domain.authority.Role;
 import com.zz.domain.authority.RoleMenu;
 import com.zz.jpatemplate.service.BaseService;
+import com.zz.security.domain.log.LogInfo;
 import com.zz.security.utils.jwt.JwtUtil;
+import com.zz.vo.SendData;
 import com.zz.vo.view.Node;
 import com.zz.vo.view.RoleMenuView;
 import com.zz.vo.view.TreeEntity;
@@ -17,6 +22,7 @@ import com.zz.zzbaseapi.base.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.springframework.util.ObjectUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -46,24 +52,30 @@ public class RoleServiceImpl extends BaseService<Role, RoleJpa> implements RoleS
         super(roleJpa);
     }
 
-
+    @KafkaSendLog(topic = TopicType.TOPIC_USER)
     @Override
-    public Role addRole(String name, String description) {
+    public String addRole(String name, String description) {
+
+        if(!ObjectUtils.isEmpty(roleJpa.findByName(name))){
+            return "角色名称已存在";
+        }
 
         Role role = new Role();
 
         role.setName(name);
         role.setDescription(description);
 
-        return roleJpa.save(role);
+        roleJpa.save(role);
+
+        return "操作成功";
 
     }
-
+    @KafkaSendLog(topic = TopicType.TOPIC_USER)
     @Override
     public int roleBindMenu(Long rId, List<Long> mIds) {
         return 0;
     }
-
+    @KafkaSendLog(topic = TopicType.TOPIC_USER)
     @Override
     public String deleteByRId(Long rId) {
         //查询改角色是否有用户绑定,如果有绑定的则不删除并返回错误信息
@@ -76,25 +88,24 @@ public class RoleServiceImpl extends BaseService<Role, RoleJpa> implements RoleS
 
         return "操作成功";
     }
-
+    @KafkaSendLog(topic = TopicType.TOPIC_USER)
     @Override
     public Role updateRole(Role role) {
         return roleJpa.save(role);
     }
-
+    @KafkaSendLog(topic = TopicType.TOPIC_USER)
     @Override
     public int updateRoleBindMenu(Long rId, List<Long> mIds) {
         return 0;
     }
-
+    @KafkaSendLog(topic = TopicType.TOPIC_USER)
     @Override
     public PageData<Role> getRoleMsgs(Integer currentPage) {
         return findPages(currentPage,5);
     }
-
+    @KafkaSendLog(topic = TopicType.TOPIC_USER)
     @Override
     public TreeEntity getNodes(Long rId) {
-
         //获取菜单与角色的绑定关系
         List<RoleMenu> roleMenus =roleMenuJpa.findByRId(rId);
         //获取所有菜单
@@ -142,7 +153,7 @@ public class RoleServiceImpl extends BaseService<Role, RoleJpa> implements RoleS
                 .nodes(nodes)
                 .build();
     }
-
+    @KafkaSendLog(topic = TopicType.TOPIC_USER)
     @Override
     public String saveNodes(Long rId, List<String> menuIds) {
 
@@ -176,12 +187,12 @@ public class RoleServiceImpl extends BaseService<Role, RoleJpa> implements RoleS
         }
         return "操作成功";
     }
-
+    @KafkaSendLog(topic = TopicType.TOPIC_USER)
     @Override
     public List<Role> getRoleMsgsList() {
         return roleJpa.findAll();
     }
-
+    @KafkaSendLog(topic = TopicType.TOPIC_USER)
     @Override
     public List<RoleMenuView> getRoleMenuMsg(HttpServletRequest request) {
 
@@ -217,7 +228,7 @@ public class RoleServiceImpl extends BaseService<Role, RoleJpa> implements RoleS
 
         return rs;
     }
-
+    @KafkaSendLog(topic = TopicType.TOPIC_USER)
     @Override
     public List<Role> findByUserRole(Long id) {
         return roleJpa.findByUserRole(id);

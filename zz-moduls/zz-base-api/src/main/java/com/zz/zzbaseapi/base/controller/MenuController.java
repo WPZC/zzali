@@ -111,7 +111,7 @@ public class MenuController {
     })
     @RequestMapping(value = "/getMenuMsgs",method = {RequestMethod.POST})
     @ResponseBody
-    public ResultVO<PageData<Menu>> getMenuMsgs(Integer currentPage){
+    public ResultVO<PageData<Menu>> getMenuMsgs(Integer currentPage) throws Exception {
 
         PageData<Menu> list = menuService.getMenuMsgs(currentPage);
 

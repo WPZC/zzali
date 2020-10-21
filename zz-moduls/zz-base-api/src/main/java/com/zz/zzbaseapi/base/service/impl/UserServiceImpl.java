@@ -1,16 +1,16 @@
 package com.zz.zzbaseapi.base.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.zz.KafkaProducer;
+import com.zz.aop.topic.TopicType;
 import com.zz.domain.PageData;
 import com.zz.domain.authority.Role;
 import com.zz.domain.authority.User;
 import com.zz.domain.authority.UserRole;
 import com.zz.jpatemplate.dao.BaseDao;
 import com.zz.jpatemplate.service.BaseService;
-import com.zz.security.utils.SecurityUtils;
+import com.zz.security.domain.log.LogInfo;
 import com.zz.vo.SendData;
-import com.zz.zzbaseapi.domain.log.LogInfo;
+import com.zz.aop.anntation.KafkaSendLog;
 import com.zz.zzbaseapi.repository.RoleJpa;
 import com.zz.zzbaseapi.repository.UserJpa;
 import com.zz.zzbaseapi.repository.UserRoleJpa;
@@ -32,7 +32,6 @@ public class UserServiceImpl extends BaseService<User,UserJpa> implements UserSe
     private RoleJpa roleJpa;
     @Autowired
     private KafkaProducer kafkaProducer;
-
     /**
      * 注入仓库位置
      * {@link BaseDao}
@@ -43,9 +42,11 @@ public class UserServiceImpl extends BaseService<User,UserJpa> implements UserSe
         super(userJpa);
     }
 
+    @KafkaSendLog(topic = TopicType.TOPIC_USER)
     @Override
     public String addUser(User userEntity, Long roleId) {
-
+        //发送日志
+        kafkaProducer.sendMsg(new SendData<>("topic.user",new LogInfo(userEntity)));
         //根据用户名查询是用户是否存在。
         //存在报用户名重复提示。不存在保存用户
         User old =  userJpa.findByUsername(userEntity.getUsername());
@@ -63,6 +64,7 @@ public class UserServiceImpl extends BaseService<User,UserJpa> implements UserSe
         return "操作失败";
     }
 
+    @KafkaSendLog(topic = TopicType.TOPIC_USER)
     @Override
     public String updateUser(User userEntity, Long roleId) {
 
@@ -114,14 +116,15 @@ public class UserServiceImpl extends BaseService<User,UserJpa> implements UserSe
 
     }
 
+    @KafkaSendLog(topic = TopicType.TOPIC_USER)
     @Override
     public PageData<User> findByPage(Integer currentPage) {
         return findPages(currentPage,5);
     }
 
+    @KafkaSendLog(topic = TopicType.TOPIC_USER)
     @Override
     public String deleteByuId(Long id) {
-
         //根据用户id删除关联的用户角色表中的数据
         UserRole userRole=userRoleJpa.findByuId(id);
 
@@ -133,9 +136,9 @@ public class UserServiceImpl extends BaseService<User,UserJpa> implements UserSe
         return "操作成功";
     }
 
+    @KafkaSendLog(topic = TopicType.TOPIC_USER)
     @Override
     public Role oleRole(Long id) {
-
         UserRole userRole=userRoleJpa.findByuId(id);
         if(userRole!=null){
             Role role = roleJpa.selectById(userRole.getRId());
@@ -148,23 +151,20 @@ public class UserServiceImpl extends BaseService<User,UserJpa> implements UserSe
         return null;
     }
 
+    @KafkaSendLog(topic = TopicType.TOPIC_USER)
     @Override
     public User getUser(String username) {
-
+        //发送日志
+        //kafkaProducer.sendMsg(new SendData<>("topic.user",new LogInfo(username)));
         User entity = userJpa.findByUsername(username);
 
         entity.setPassword(null);
 
         return entity;
     }
-
+    @KafkaSendLog(topic = TopicType.TOPIC_USER)
     @Override
     public User findByUserName(String username) {
-
-        Thread t = Thread.currentThread();
-        StackTraceElement[] s = t.getStackTrace();
-
-        kafkaProducer.sendMsg(new SendData<>("topic.user",new LogInfo(username)));
         return userJpa.findByUsername(username);
     }
 

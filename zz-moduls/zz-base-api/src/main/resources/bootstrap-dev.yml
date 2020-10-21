@@ -1,35 +1,34 @@
 server:
   port: 10505
-  tomcat:
-    uri-encoding: UTF-8
-
 spring:
+  aop:
+    auto: true
   application:
     name: zz-base-api
   cloud:
     nacos:
       discovery:
-        server-addr: localhost:8848
+        server-addr: 192.168.0.10:8848
         #此处的namespace是discovery服务对应的命名空间，与config不同
-        namespace: 09740bb3-4ee5-45f8-a5f2-f24d7cd96288
+        namespace: 37b78898-9f3b-465c-ba15-57e9fadddb71
       config:
-        server-addr: localhost:8848
+        server-addr: 192.168.0.10:8848
         file-extension: yaml
         #此处只是对应config的命名空间
-        namespace: 09740bb3-4ee5-45f8-a5f2-f24d7cd96288
+        namespace: 37b78898-9f3b-465c-ba15-57e9fadddb71
+        #共享配置文件
+        shared-configs:
+          - data-id: shared.yaml
+            group: dev
+            refresh: true
+          - data-id: kafka-producer.yaml
+            group: dev
+            refresh: true
+  #数据源
   datasource:
     name: db-base
-    url: jdbc:mysql://localhost:3306/cloudall?serverTimezone=GMT%2B8
+    url: jdbc:mysql://192.168.0.10:3306/zfswr_authority?serverTimezone=GMT%2B8
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
-  jpa:
-    properties:
-      hibernate:
-        format_sql: true
-        show_sql: true
-    hibernate:
-      ddl-auto: update
-  main:
-    allow-bean-definition-overriding: true
 

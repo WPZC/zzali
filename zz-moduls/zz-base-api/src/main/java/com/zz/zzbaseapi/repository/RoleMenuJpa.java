@@ -1,6 +1,5 @@
 package com.zz.zzbaseapi.repository;
 
-
 import com.zz.domain.authority.RoleMenu;
 import com.zz.jpatemplate.dao.BaseDao;
 import org.springframework.data.jpa.repository.Query;

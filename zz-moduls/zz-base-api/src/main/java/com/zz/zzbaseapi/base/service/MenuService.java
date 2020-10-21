@@ -39,5 +39,5 @@ public interface MenuService {
      * @param currentPage
      * @return
      */
-    PageData<Menu> getMenuMsgs(Integer currentPage);
+    PageData<Menu> getMenuMsgs(Integer currentPage) throws Exception;
 }

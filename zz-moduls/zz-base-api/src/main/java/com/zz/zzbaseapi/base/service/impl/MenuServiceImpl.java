@@ -1,22 +1,20 @@
 package com.zz.zzbaseapi.base.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.zz.KafkaProducer;
+import com.zz.aop.anntation.KafkaSendLog;
+import com.zz.aop.topic.TopicType;
 import com.zz.domain.PageData;
+import com.zz.domain.PageInfo;
 import com.zz.domain.authority.Menu;
+import com.zz.enums.Sort;
 import com.zz.jpatemplate.dao.BaseDao;
 import com.zz.jpatemplate.service.BaseService;
 import com.zz.region.methods.utils.StringUtil;
 import com.zz.region.methods.utils.Utils;
-import com.zz.security.utils.SecurityUtils;
-import com.zz.vo.SendData;
-import com.zz.zzbaseapi.domain.log.LogInfo;
 import com.zz.zzbaseapi.repository.MenuJpa;
 import com.zz.zzbaseapi.base.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
 
 /**
  * 菜单模块
@@ -30,9 +28,6 @@ public class MenuServiceImpl extends BaseService<Menu, MenuJpa> implements MenuS
     @Autowired
     private MenuJpa menuJpa;
 
-    @Autowired
-    private KafkaProducer kafkaProducer;
-
     /**
      * 注入仓库位置
      * {@link BaseDao}
@@ -43,6 +38,7 @@ public class MenuServiceImpl extends BaseService<Menu, MenuJpa> implements MenuS
         super(menuJpa);
     }
 
+    @KafkaSendLog(topic = TopicType.TOPIC_USER)
     @Override
     public String addMenu(String p_code,String menu_name,String router,String imgsrc) {
 
@@ -72,6 +68,7 @@ public class MenuServiceImpl extends BaseService<Menu, MenuJpa> implements MenuS
         return "操作成功";
     }
 
+    @KafkaSendLog(topic = TopicType.TOPIC_USER)
     @Override
     public Integer updateMenu(String menuCode, String menuName,String router,String imgsrc) {
 
@@ -81,6 +78,7 @@ public class MenuServiceImpl extends BaseService<Menu, MenuJpa> implements MenuS
 
     }
 
+    @KafkaSendLog(topic = TopicType.TOPIC_USER)
     @Override
     public Integer deleteMenu(String menuCode) {
 
@@ -97,10 +95,17 @@ public class MenuServiceImpl extends BaseService<Menu, MenuJpa> implements MenuS
         return 0;
     }
 
+    @KafkaSendLog(topic = TopicType.TOPIC_USER)
     @Override
-    public PageData<Menu> getMenuMsgs(Integer currentPage) {
+    public PageData<Menu> getMenuMsgs(Integer currentPage) throws Exception {
 
-        PageData<Menu> list = findPages(currentPage,5);
+        PageInfo pageInfo = new PageInfo();
+
+        pageInfo.setSort(Sort.DESC);
+        pageInfo.setFiled("index_num");
+        pageInfo.setCurrentPage(currentPage);
+
+        PageData<Menu> list = findByPages(pageInfo);
 
         return list;
     }

@@ -1,6 +1,7 @@
 package com.zz.zzbaseapi.base.controller;
 
 import com.zz.Backtrack;
+import com.zz.aop.anntation.KafkaSendLog;
 import com.zz.domain.PageData;
 import com.zz.domain.ResultVO;
 import com.zz.domain.authority.Role;
@@ -46,17 +47,14 @@ public class UserBaseController extends BaseController<User, UserServiceImpl> {
             user.setSavetime(new Date());
             String rs = userService.addUser(user,roleId);
 
-            if(rs.equals("success")){
+            if(rs.equals("操作成功")){
                 return Backtrack.success(user,"操作成功");
             }
 
-           return Backtrack.errot("操作失败");
+           return Backtrack.errot(rs);
         }catch (Exception e){
             e.printStackTrace();
-            if(e instanceof RuntimeException ){
-                return Backtrack.errot(e.getMessage());
-            }
-            return Backtrack.errot("操作失败");
+            return Backtrack.errot("操作异常");
         }
 
 

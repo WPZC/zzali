@@ -22,7 +22,7 @@ public interface RoleService {
      * @param description
      * @return
      */
-    Role addRole(String name, String description);
+    String addRole(String name, String description);
 
     /**
      * 给角色绑定菜单

@@ -23,12 +23,20 @@ public interface RoleJpa extends BaseDao<Role, Integer> {
     List<Role> findByUserRole(Long id);
 
     /**
+     * 根据角色名称查询
+     * @param name
+     * @return
+     */
+    Role findByName(String name);
+    /**
      * 查询该角色是否被绑定
      * @param rId
      * @return
      */
     @Query(nativeQuery = true,value = "SELECT COUNT(*) FROM `user_role` where r_id = ?1")
     int findByUserRoleBind(Long rId);
+
+
 
     /**
      * 根据Id删除

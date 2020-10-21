@@ -60,6 +60,11 @@ public class LogInfo {
     @Column(name = "operation_time")
     private Date operationTime;
 
+    /**
+     * 异常信息
+     */
+    private String ex;
+
 
 
 

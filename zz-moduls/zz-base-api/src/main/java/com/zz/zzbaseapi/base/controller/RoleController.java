@@ -50,8 +50,10 @@ public class RoleController {
     @ResponseBody
     public ResultVO<Boolean> addRole(String name, String description){
 
-        if(null==roleService.addRole(name,description)){
-            return Backtrack.errot("操作失败");
+        String rs = roleService.addRole(name,description);
+
+        if("操作成功".equals(rs)){
+            return Backtrack.errot(rs);
         }
 
         return Backtrack.success(true,"操作成功");

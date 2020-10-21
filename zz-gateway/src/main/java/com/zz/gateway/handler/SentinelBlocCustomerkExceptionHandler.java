@@ -4,6 +4,8 @@ import com.alibaba.csp.sentinel.adapter.gateway.sc.callback.GatewayCallbackManag
 import com.alibaba.csp.sentinel.adapter.gateway.sc.exception.SentinelGatewayBlockExceptionHandler;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.alibaba.csp.sentinel.util.function.Supplier;
+import com.google.gson.Gson;
+import com.zz.domain.ResultVO;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.codec.HttpMessageWriter;
 import org.springframework.http.codec.ServerCodecConfigurer;
@@ -29,6 +31,7 @@ public class SentinelBlocCustomerkExceptionHandler implements WebExceptionHandle
 
     private List<ViewResolver> viewResolvers;
     private List<HttpMessageWriter<?>> messageWriters;
+    private final Gson gson = new Gson();
 
     public SentinelBlocCustomerkExceptionHandler(List<ViewResolver> viewResolvers, ServerCodecConfigurer serverCodecConfigurer) {
         this.viewResolvers = viewResolvers;
@@ -48,10 +51,15 @@ public class SentinelBlocCustomerkExceptionHandler implements WebExceptionHandle
     @NonNull
     @Override
     public Mono<Void> handle(ServerWebExchange exchange, Throwable ex) {
-
+        ex.printStackTrace();
+        String error = ex.getMessage();
+        ResultVO<String> rs = new ResultVO<>();
+        rs.setCode(11);
+        rs.setMsg(error);
+        rs.setData(error);
         ServerHttpResponse serverHttpResponse = exchange.getResponse();
         serverHttpResponse.getHeaders().add("Content-Type", "application/json;charset=UTF-8");
-        byte[] datas = "{\"code\":20,\"msg\":\"限流了\"}".getBytes(StandardCharsets.UTF_8);
+        byte[] datas = gson.toJson(rs).getBytes(StandardCharsets.UTF_8);
         DataBuffer buffer = serverHttpResponse.bufferFactory().wrap(datas);
         return serverHttpResponse.writeWith(Mono.just(buffer));
 
