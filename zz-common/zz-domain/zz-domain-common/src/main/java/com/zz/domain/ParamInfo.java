@@ -1,11 +1,14 @@
 package com.zz.domain;
 
+import com.sun.org.apache.regexp.internal.RE;
+import com.zz.enums.Operation;
 import com.zz.enums.Symbol;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 查询参数
@@ -33,6 +36,55 @@ public class ParamInfo {
      */
     @ApiModelProperty(value = "符号（查询符号，默认为EQ）",name = "symbol",dataType = "Symbol")
     private Symbol symbol = Symbol.EQ;
+
+    /**
+     * 补足前字符
+     */
+    @ApiModelProperty(value = "备用字段，用于补足间接查询条件",name = "symbol",dataType = "Symbol")
+    private String tsBefore;
+
+    /**
+     * 补足后字符
+     */
+    @ApiModelProperty(value = "备用字段，用于补足间接查询条件",name = "symbol",dataType = "Symbol")
+    private String tsAfter;
+
+    /**
+     * 特殊条件,只有createSpecification存在对Operation进行处理的才能生效
+     */
+    private Map<Operation,List<ParamInfo>> operationMap;
+
+//    public static Bulider bulider(){
+//        return new Bulider();
+//    }
+
+//    /**
+//     * 构建器
+//     */
+//    static class Bulider{
+//
+//        ParamInfo paramInfo;
+//
+//        public Bulider(){
+//            this.paramInfo = new ParamInfo();
+//        }
+//        public Bulider field(String field){
+//            this.paramInfo.field = field;
+//            return this;
+//        }
+//        public Bulider params(List<Object> params){
+//            this.paramInfo.params = params;
+//            return this;
+//        }
+//        public Bulider symbol(Symbol symbol){
+//            this.paramInfo.symbol = symbol;
+//            return this;
+//        }
+//        public ParamInfo bulid(){
+//            return this.paramInfo;
+//        }
+//
+//    }
 
     public String getField() {
         return field;
@@ -70,5 +122,21 @@ public class ParamInfo {
         }else{
             this.symbol = symbol;
         }
+    }
+
+    public String getTsBefore() {
+        return tsBefore;
+    }
+
+    public void setTsBefore(String tsBefore) {
+        this.tsBefore = tsBefore;
+    }
+
+    public String getTsAfter() {
+        return tsAfter;
+    }
+
+    public void setTsAfter(String tsAfter) {
+        this.tsAfter = tsAfter;
     }
 }

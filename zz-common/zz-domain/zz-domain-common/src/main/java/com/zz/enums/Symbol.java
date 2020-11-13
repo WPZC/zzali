@@ -20,7 +20,11 @@ public enum Symbol {
     //小于等于
     LE(6,"小于等于"),
     //大于等于
-    GE(7,"大于等于");
+    GE(7,"大于等于"),
+    //右模糊查询
+    LIKERIGHT(8,"右模糊查询"),
+    //左模糊查询
+    LIKELEFT(9,"左模糊查询");
 
     //下标
     private Integer index;

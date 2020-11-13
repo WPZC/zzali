@@ -12,7 +12,11 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 
 /**
@@ -53,6 +57,23 @@ public class KafkaSendLogAspect {
         String methodName = method.getName();
         //创建日志对象
         LogInfo<Object[]> logInfo = new LogInfo<>(objects);
+        //检查是否有无法序列化的对象
+        int count = 0;
+        for (Object o:logInfo.getParams()){
+            if(o instanceof HttpServletRequest){
+                logInfo.getParams()[count] = null;
+                continue;
+            }else if(o instanceof MultipartHttpServletRequest){
+                logInfo.getParams()[count] = null;
+                continue;
+            }else if(o instanceof HttpServletResponse){
+                //logInfo.setParams(null);
+                logInfo.getParams()[count] = null;
+                continue;
+                //break ofs;
+            }
+            count = count + 1;
+        }
         //设置调用的方法名
         logInfo.setFName(className+","+methodName);
         //发送给kafka
@@ -78,6 +99,23 @@ public class KafkaSendLogAspect {
         String methodName = method.getName();
         //创建日志对象
         LogInfo<Object[]> logInfo = new LogInfo<>(objects);
+        //检查是否有无法序列化的对象
+        int count = 0;
+        for (Object o:logInfo.getParams()){
+            if(o instanceof HttpServletRequest){
+                logInfo.getParams()[count] = null;
+                continue;
+            }else if(o instanceof MultipartHttpServletRequest){
+                logInfo.getParams()[count] = null;
+                continue;
+            }else if(o instanceof HttpServletResponse){
+                //logInfo.setParams(null);
+                logInfo.getParams()[count] = null;
+                continue;
+                //break ofs;
+            }
+            count = count + 1;
+        }
         //设置调用的方法名
         logInfo.setFName(className+","+methodName);
         //是否成功，默认成功，因为当前方法为异常后走的，所以为1

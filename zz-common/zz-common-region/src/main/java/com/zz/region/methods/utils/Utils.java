@@ -22,4 +22,21 @@ public class Utils {
 
     }
 
+    /**
+     * 处理字符串  如：  abc_dex ---> abcDex
+     * @param str
+     * @return
+     */
+    public static  String removeLine(String str){
+        if(null != str && str.contains("_")){
+            int i = str.indexOf("_");
+            char ch = str.charAt(i+1);
+            char newCh = (ch+"").substring(0, 1).toUpperCase().toCharArray()[0];
+            String newStr = str.replace(str.charAt(i+1), newCh);
+            String newStr2 = newStr.replace("_", "");
+            return newStr2;
+        }
+        return str;
+    }
+
 }

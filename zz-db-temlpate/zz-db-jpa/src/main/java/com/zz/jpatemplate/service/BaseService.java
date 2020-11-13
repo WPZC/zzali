@@ -1,27 +1,27 @@
 package com.zz.jpatemplate.service;
 
+import com.zz.domain.BaseDoMain;
 import com.zz.domain.PageData;
 import com.zz.domain.PageInfo;
 import com.zz.domain.ParamInfo;
+import com.zz.enums.Operation;
 import com.zz.enums.Symbol;
+import com.zz.interfaces.ParamInfoI;
 import com.zz.jpatemplate.dao.BaseDao;
+import com.zz.jpatemplate.interfaces.ParamComplex;
 import com.zz.jpatemplate.utils.DateUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 基础查询模块
@@ -30,7 +30,7 @@ import java.util.List;
  * @version 1.0
  * @date 2020/8/10 16:04
  */
-public abstract class BaseService<T,K extends BaseDao>{
+public class BaseService<T extends BaseDoMain,K extends BaseDao> implements BaseServiceI<T,K>{
 
 
     /**
@@ -53,13 +53,24 @@ public abstract class BaseService<T,K extends BaseDao>{
      */
     public K k(){return k;}
 
+    /**
+     * 获取资源库
+     * @return
+     */
+    @Override
     public K getK(){
         return k;
     }
 
-    public T findById(Long Id){
+    /**
+     * 根据主键查询
+     * @param id
+     * @return
+     */
+    @Override
+    public T findById(Long id){
 
-        return (T) k.findById(Id).get();
+        return (T) k.findById(id).get();
 
     }
 
@@ -67,15 +78,31 @@ public abstract class BaseService<T,K extends BaseDao>{
      * 根据主键ID删除
      * @param id
      */
+    @Override
     public void deleteById(Long id){
         k.deleteById(id);
     }
 
     /**
+     * 修改
+     * @param t
+     */
+    @Override
+    public void updateData(T t){
+
+        //对像判断
+        Assert.notNull(t,"对象不能为空");
+        //id非空判断
+        Assert.notNull(t.getId(),"修改ID不能为空");
+        //判断是否保存成功
+        Assert.notNull(k.save(t),"操作失败");
+    }
+    /**
      * 分页查询
      * @param currentPage
      * @return
      */
+    @Override
     public Page<T> findPagesN(Integer currentPage, Integer pagesize){
 
         //Sort.Direction是个枚举有ASC(升序)和DESC(降序)
@@ -94,6 +121,7 @@ public abstract class BaseService<T,K extends BaseDao>{
      * @param currentPage
      * @return
      */
+    @Override
     public PageData<T> findPages(Integer currentPage, Integer pagesize){
         return findByPages(currentPage,pagesize,Sort.Direction.ASC);
     }
@@ -102,7 +130,8 @@ public abstract class BaseService<T,K extends BaseDao>{
      * @param currentPage
      * @return
      */
-    public PageData<T> findPages(Integer currentPage, Integer pagesize,Sort.Direction sort){
+    @Override
+    public PageData<T> findPages(Integer currentPage, Integer pagesize, Sort.Direction sort){
         return findByPages(currentPage,pagesize,sort);
     }
     /**
@@ -110,6 +139,7 @@ public abstract class BaseService<T,K extends BaseDao>{
      * @param currentPage
      * @return
      */
+    @Override
     @Deprecated
     public PageData<T> findPages(Integer currentPage, Integer pagesize,Sort.Direction sort,Specification<T> specification){
         return findByPages(currentPage,pagesize,sort,specification);
@@ -123,6 +153,7 @@ public abstract class BaseService<T,K extends BaseDao>{
      * @param specification 条件
      * @return
      */
+    @Override
     @Deprecated
     public PageData<T> findByPages(Integer currentPage, Integer pagesize,Sort.Direction sort,Specification<T> specification){
         //Sort.Direction是个枚举有ASC(升序)和DESC(降序)
@@ -146,6 +177,14 @@ public abstract class BaseService<T,K extends BaseDao>{
 
     }
 
+    /**
+     * 分页查询
+     * @param currentPage
+     * @param pagesize
+     * @param sort
+     * @return
+     */
+    @Override
     @Deprecated
     public PageData<T> findByPages(Integer currentPage, Integer pagesize,Sort.Direction sort){
         //Sort.Direction是个枚举有ASC(升序)和DESC(降序)
@@ -174,6 +213,7 @@ public abstract class BaseService<T,K extends BaseDao>{
      * @param pageInfo
      * @return
      */
+    @Override
     public PageData<T> findByPages(PageInfo pageInfo) throws Exception {
         //如果pageInfo为null，则创建默认pageInfo
         if(ObjectUtils.isEmpty(pageInfo)){
@@ -215,12 +255,52 @@ public abstract class BaseService<T,K extends BaseDao>{
     }
 
     /**
+     * 根据Specification和pageInfo查询，该方法忽略pageinfo中的参数信息
+     * @param pageInfo
+     * @return
+     */
+    public PageData<T> findByPages(Specification<T> specification,PageInfo pageInfo) throws Exception {
+        //如果pageInfo为null，则创建默认pageInfo
+        if(ObjectUtils.isEmpty(pageInfo)){
+            pageInfo = new PageInfo();
+        }
+        //Sort.Direction是个枚举有ASC(升序)和DESC(降序)
+        //定义sort
+        Sort.Direction sort;
+        //判断类型
+        if(com.zz.enums.Sort.ASC == pageInfo.getSort()){
+            sort = Sort.Direction.ASC;
+        }else{
+            sort = Sort.Direction.DESC;
+        }
+        //PageRequest继承于AbstractPageRequest并且实现了Pageable
+        //获取PageRequest对象 index:页码 从0开始  size每页容量 sort排序方式 "id"->properties 以谁为准排序
+        Pageable pageable = PageRequest.of((pageInfo.getCurrentPage()-1)>=0?(pageInfo.getCurrentPage()-1):0, pageInfo.getPagesize(), sort, pageInfo.getFiled());
+        //定义page对象
+        Page<T> page;
+        page = k.findAll(specification,pageable);
+        ///获取该分页的列表
+        List<T> list = page.getContent();
+
+        PageData<T> pageData = new PageData<>();
+        //获取总页数
+        pageData.setPagesize(page.getTotalPages());
+        //获取总元素个数
+        pageData.setTotal(page.getTotalElements());
+        pageData.setListData(list);
+
+        return pageData;
+
+    }
+
+    /**
      * 条件分页查询
      * @param currentPage
      * @param pagesize
      * @param specification
      * @return
      */
+    @Override
     @Deprecated
     public Page<T> findPages(Integer currentPage, Integer pagesize, Specification<T> specification){
 
@@ -240,9 +320,24 @@ public abstract class BaseService<T,K extends BaseDao>{
      * @param specification 条件
      * @return
      */
-    public List<T> getNoPageList(Specification<T> specification){
+    @Override
+    public List<T> findNoPageList(Specification<T> specification){
 
         return k.findAll(specification);
+
+    }
+    /**
+     * 不分页条件查询
+     * @param specification 条件
+     * @param direction     排序方式
+     * @param perproties    根据哪个字段排序
+     * @return
+     */
+    public List<T> findNoPageList(Specification<T> specification,Sort.Direction direction,String perproties){
+
+        Sort sort = Sort.by(direction,perproties);
+
+        return k.findAll(specification,sort);
 
     }
 
@@ -257,6 +352,7 @@ public abstract class BaseService<T,K extends BaseDao>{
      * @param maps
      * @return
      */
+    @Deprecated
     public Specification<T> createSpecification(HashMap<String, List<Object>> maps, Symbol symbol) {
 
         Specification<T> specification = new Specification<T>() {
@@ -322,6 +418,7 @@ public abstract class BaseService<T,K extends BaseDao>{
     }
 
     /**
+     * 简单条件查询
      * 获取Specification条件(多符号)
      * maps为参数集，key为字段，value为值集
      * maps的value是list，list第一个为符号位，所以查询的时候会忽略第一个未位
@@ -329,29 +426,28 @@ public abstract class BaseService<T,K extends BaseDao>{
      * nq:不等
      * like:模糊查询
      * notlike:非模糊查询
-     * @param pageInfos
+     * @param paramInfos
      * @return
      */
-    public Specification<T> createSpecification(List<ParamInfo> pageInfos) throws Exception{
+    public Specification<T> createSpecification(List<ParamInfo> paramInfos) throws Exception{
 
         Specification<T> specification = new Specification<T>() {
             @Override
             public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
                 List<Predicate> predicates = new ArrayList<>();
-                for (ParamInfo param:pageInfos) {
+                for (ParamInfo param:paramInfos) {
+                    System.out.println(param.hashCode());
                     //循环map记性验证
                     List<Object> objects = param.getParams();
                     //符号
                     Symbol symbol  = param.getSymbol();
-                    //取出后移除第一个
-                    //objects.remove(0);
                     switch (symbol){
                         case EQ:
                             //等于
                             objects.stream().forEach(o -> {
-                                if(null!=o&&!o.equals("")){
-                                    String stro = (String) o;
-                                    predicates.add(criteriaBuilder.equal(root.get(param.getField()), stro));
+                                if(null!=o && !o.equals("")){
+                                    //String stro = (String) o;
+                                    predicates.add(criteriaBuilder.equal(root.get(param.getField()), o));
                                 }
                             });
                             break;
@@ -359,8 +455,8 @@ public abstract class BaseService<T,K extends BaseDao>{
                             //不等于
                             objects.stream().forEach(o -> {
                                 if(null!=o&&!o.equals("")){
-                                    String stro = (String) o;
-                                    predicates.add(criteriaBuilder.notEqual(root.get(param.getField()), stro));
+                                    //String stro = (String) o;
+                                    predicates.add(criteriaBuilder.notEqual(root.get(param.getField()), o));
                                 }
                             });
                             break;
@@ -368,8 +464,26 @@ public abstract class BaseService<T,K extends BaseDao>{
                             //like
                             objects.stream().forEach(o -> {
                                 if(null!=o&&!o.equals("")){
-                                    String stro = (String) o;
-                                    predicates.add(criteriaBuilder.like(root.get(param.getField()), "%"+stro+"%"));
+                                    //String stro = (String) o;
+                                    predicates.add(criteriaBuilder.like(root.get(param.getField()), "%"+o+"%"));
+                                }
+                            });
+                            break;
+                        case LIKERIGHT:
+                            //右模糊
+                            objects.stream().forEach(o -> {
+                                if(null!=o&&!o.equals("")){
+                                    //String stro = (String) o;
+                                    predicates.add(criteriaBuilder.like(root.get(param.getField()), param.getTsBefore() + o + param.getTsAfter() + "%"));
+                                }
+                            });
+                            break;
+                        case LIKELEFT:
+                            //左模糊
+                            objects.stream().forEach(o -> {
+                                if(null!=o&&!o.equals("")){
+                                    //String stro = (String) o;
+                                    predicates.add(criteriaBuilder.like(root.get(param.getField()), "%" + param.getTsBefore() + o + param.getTsAfter()));
                                 }
                             });
                             break;
@@ -377,8 +491,8 @@ public abstract class BaseService<T,K extends BaseDao>{
                             //nolike
                             objects.stream().forEach(o -> {
                                 if(null!=o&&!o.equals("")){
-                                    String stro = (String) o;
-                                    predicates.add(criteriaBuilder.notLike(root.get(param.getField()), "%"+stro+"%"));
+                                    //String stro = (String) o;
+                                    predicates.add(criteriaBuilder.notLike(root.get(param.getField()), "%"+o+"%"));
                                 }
                             });
                             break;
@@ -408,19 +522,59 @@ public abstract class BaseService<T,K extends BaseDao>{
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
-
                             break;
                         default:
                             new RuntimeException("没有对比到符号位，请使用别的方法");
                     }
                 }
                 System.out.println("predicates:"+predicates.size());
+                if(predicates.size()==0){
+                    return null;
+                }
                 return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
             }
         };
-
         return specification;
     }
 
+    /*----------------------------------特殊方法去---------------------------------------------------*/
+    /**
+     * 根据pageInfo查询
+     * @param pageInfo
+     * @return
+     */
+    public PageData<T> findByPagesRole(Specification s,PageInfo pageInfo) throws Exception {
+        //如果pageInfo为null，则创建默认pageInfo
+        if(ObjectUtils.isEmpty(pageInfo)){
+            pageInfo = new PageInfo();
+        }
+        //Sort.Direction是个枚举有ASC(升序)和DESC(降序)
+        //定义sort
+        Sort.Direction sort;
+        //判断类型
+        if(com.zz.enums.Sort.ASC == pageInfo.getSort()){
+            sort = Sort.Direction.ASC;
+        }else{
+            sort = Sort.Direction.DESC;
+        }
+        //PageRequest继承于AbstractPageRequest并且实现了Pageable
+        //获取PageRequest对象 index:页码 从0开始  size每页容量 sort排序方式 "id"->properties 以谁为准排序
+        Pageable pageable = PageRequest.of((pageInfo.getCurrentPage()-1)>=0?(pageInfo.getCurrentPage()-1):0, pageInfo.getPagesize(), sort, pageInfo.getFiled());
+        //定义page对象
+        Page<T> page;
+        //判断参数是否存在
+        page = k.findAll(s, pageable);
+        ///获取该分页的列表
+        List<T> list = page.getContent();
 
+        PageData<T> pageData = new PageData<>();
+        //获取总页数
+        pageData.setPagesize(page.getTotalPages());
+        //获取总元素个数
+        pageData.setTotal(page.getTotalElements());
+        pageData.setListData(list);
+
+        return pageData;
+
+    }
 }

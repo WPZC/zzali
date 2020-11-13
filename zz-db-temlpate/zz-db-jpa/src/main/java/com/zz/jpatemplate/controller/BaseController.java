@@ -9,7 +9,6 @@ import com.zz.domain.ResultVO;
 import com.zz.jpatemplate.service.BaseService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @version 1.0
  * @date 2020/9/27 9:15
  */
-@Controller
 public class BaseController<T extends BaseDoMain,B extends BaseService>{
 
     //service
@@ -36,6 +34,28 @@ public class BaseController<T extends BaseDoMain,B extends BaseService>{
         p = JSONObject.parseObject(pageInfo,p.getClass());
 
         return Backtrack.success(b.findByPages(p));
+
+    }
+
+    @ApiOperation(value = "修改数据")
+    @RequestMapping(value = "/updateData",method = RequestMethod.POST)
+    @ResponseBody
+    public ResultVO<Boolean> updateData(T t) throws Exception {
+
+        b.updateData(t);
+
+        return Backtrack.success(true,"操作成功");
+
+    }
+
+    @ApiOperation(value = "根据ID删除")
+    @RequestMapping(value = "/deleteByIdFunc",method = RequestMethod.POST)
+    @ResponseBody
+    public ResultVO<Boolean> deleteByIdFunc(Long id) throws Exception {
+
+        b.deleteById(id);
+
+        return Backtrack.success(true,"删除成功");
 
     }
 
