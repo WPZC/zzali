@@ -1,13 +1,12 @@
-package com.zz.nettyserver.server;
+package com.zz.nettyserver.cache.domain;
 
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.Channel;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * netty信息保存，用于关闭通道
+ * client通道
  * @author wqy
  * @version 1.0
  * @date 2020/9/12 11:53
@@ -15,12 +14,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Builder
 @Data
-public class NettyCache {
+public class NettyClientCache {
 
     //服务名
     private String name;
     //通道控制权
-    private ChannelFuture channelFuture;
+    private Channel channel;
+    //更新时间
+    private Long updateTime;
 
     /**
      * 关闭
@@ -29,8 +30,8 @@ public class NettyCache {
     public boolean canel(){
         try {
             //关闭通道
-            this.channelFuture.channel().close();
-            log.info(name+":++++++++++++++++++++++++++++服务结束，通道关闭++++++++++++++++++++++++++++:"+name);
+            this.channel.close();
+            log.info(name+":++++++++++++++++++++++++++++客户端通道关闭++++++++++++++++++++++++++++:"+name);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -24,11 +24,15 @@ import java.util.List;
  * @date 2020/9/14 10:03
  */
 public abstract class PacketDecoder extends ByteToMessageDecoder {
+
+    /**
+     * 读取in中的数据，然后写入到out中，传递到下一个方法。
+     * 链路传递数据的时候ReadHandler<T>会根据Object类型进行匹配
+     * @param ctx
+     * @param in
+     * @param out
+     * @throws Exception
+     */
     @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
-
-        //读取in中的数据，然后写入到out中，传递到下一个方法。
-        //链路传递数据的时候ReadHandler<T>会根据Object类型进行匹配
-
-    }
+    protected abstract void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception;
 }

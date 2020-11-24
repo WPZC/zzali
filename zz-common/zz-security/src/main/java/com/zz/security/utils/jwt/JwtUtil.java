@@ -1,7 +1,6 @@
 package com.zz.security.utils.jwt;
 
 import com.zz.domain.authority.Role;
-import com.zz.region.methods.ead.EAD;
 import com.zz.security.domain.AuthUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -24,10 +23,11 @@ public class JwtUtil{
      * @param roles
      * @return
      */
-    public static String generateToken(String username,List<Role> roles) {
+    public static String generateToken(String username,List<Role> roles,String organizationNum,String organizationName) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("roles", roles.parallelStream().map(Role::getName).collect(Collectors.joining(",")));
- 
+        claims.put("orgCode",organizationNum);
+        claims.put("orgName",organizationName);
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(username)
@@ -35,12 +35,12 @@ public class JwtUtil{
                 //创建时间
                 .setIssuedAt(new Date())
                 //过期时间，我们设置为 五分钟
-                .setExpiration(new Date(System.currentTimeMillis() + 60 * 60 * 60 * 1000))
+                .setExpiration(new Date(System.currentTimeMillis() + 60 * 60 * 60 * 60 * 1000))
                 //签名，通过密钥保证安全性
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
     }
- 
+
     /**
      * 解析token
      * @param token
@@ -55,12 +55,13 @@ public class JwtUtil{
         //String audience = claims.getAudience();
         //System.out.println(audience);
         String roles = (String) claims.get("roles");
- 
+        claims.get("orgName");
         //因为生成的时候没有放入密码，所以不需要密码
-        return new AuthUser(username, null, Arrays.stream(roles.split(",")).map(name -> {
-            Role role = new Role();
-            role.setName(name);
-            return role;
-        }).collect(Collectors.toList()));
+        return new AuthUser(username
+                , null
+                , Arrays.stream(roles.split(",")).map(name -> { Role role = new Role();role.setName(name);return role; }).collect(Collectors.toList())
+                ,claims.get("orgName").toString()
+                ,claims.get("orgCode").toString()
+                ,null);
     }
 }

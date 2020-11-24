@@ -474,7 +474,7 @@ public class BaseService<T extends BaseDoMain,K extends BaseDao> implements Base
                             objects.stream().forEach(o -> {
                                 if(null!=o&&!o.equals("")){
                                     //String stro = (String) o;
-                                    predicates.add(criteriaBuilder.like(root.get(param.getField()), param.getTsBefore() + o + param.getTsAfter() + "%"));
+                                    predicates.add(criteriaBuilder.like(root.get(param.getField()), (param.getTsBefore()==null?"":param.getTsBefore()) + o + (param.getTsAfter()==null?"":param.getTsAfter()) + "%"));
                                 }
                             });
                             break;
@@ -483,7 +483,7 @@ public class BaseService<T extends BaseDoMain,K extends BaseDao> implements Base
                             objects.stream().forEach(o -> {
                                 if(null!=o&&!o.equals("")){
                                     //String stro = (String) o;
-                                    predicates.add(criteriaBuilder.like(root.get(param.getField()), "%" + param.getTsBefore() + o + param.getTsAfter()));
+                                    predicates.add(criteriaBuilder.like(root.get(param.getField()), "%" + (param.getTsBefore()==null?"":param.getTsBefore()) + o + (param.getTsAfter()==null?"":param.getTsAfter())));
                                 }
                             });
                             break;

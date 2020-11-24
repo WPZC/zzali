@@ -38,7 +38,12 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("user: " + username + " is not found.");
         }
  
-        return new AuthUser(user.getUsername(), user.getPassword(), roleMangementFegin.findByUserRole(user.getId(), EAD.encode()));
+        return new AuthUser(user.getUsername()
+                , user.getPassword()
+                , roleMangementFegin.findByUserRole(user.getId()
+                , EAD.encode())
+                ,user.getOrganizationName()
+                ,user.getOrganizationNum(),user.getId());
     }
  
     @Bean

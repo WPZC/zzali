@@ -59,7 +59,7 @@ public class UserController{
         List<Role> roles = customUserDetailsService.findByUserRole(user.getId());
         //success.setData(JwtUtil.generateToken(username, roles));
 
-        return Backtrack.success(JwtUtil.generateToken(username, roles),null);
+        return Backtrack.success(JwtUtil.generateToken(username, roles,user.getOrganizationNum(),user.getOrganizationName()),null);
 
     }
 }

@@ -26,6 +26,16 @@ public class AuthUser implements UserDetails {
     private String username;
     private String password;
     private List<Role> roles;
+    /**
+     * 组织机构名称
+     */
+    private String orgName;
+    /**
+     * 组织机构编码
+     */
+    private String orgCode;
+
+    private Long uId;
  
  
     @Override

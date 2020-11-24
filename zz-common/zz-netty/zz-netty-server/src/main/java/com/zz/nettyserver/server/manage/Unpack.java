@@ -1,4 +1,4 @@
-package com.zz.nettyserver.server;
+package com.zz.nettyserver.server.manage;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -14,16 +14,14 @@ import io.netty.handler.codec.LineBasedFrameDecoder;
  * @version 1.0
  * @date 2020/9/12 11:23
  */
-public abstract class Unpack {
-
-    private ChannelHandler channelHandler;
+public interface Unpack {
 
     /**
      * 构建定长拆包器
      * @param frameLength
      * @return
      */
-    public ChannelHandler fixedLengthFrameDecoder(int frameLength){
+    static ChannelHandler fixedLengthFrameDecoder(int frameLength){
         return new FixedLengthFrameDecoder(frameLength);
     }
     /**
@@ -31,7 +29,7 @@ public abstract class Unpack {
      * @param maxLength 一帧的最大长度
      * @return
      */
-    public ChannelHandler lineBasedFrameDecoder(int maxLength){
+    static ChannelHandler lineBasedFrameDecoder(int maxLength){
         return new LineBasedFrameDecoder(maxLength);
     }
 
@@ -42,7 +40,7 @@ public abstract class Unpack {
      * @param separator 分隔符
      * @return
      */
-    public ChannelHandler delimiterBasedFrameDecoder(int maxLength,String separator){
+    static ChannelHandler delimiterBasedFrameDecoder(int maxLength,String separator){
         ByteBuf delimiter = Unpooled.copiedBuffer(separator.getBytes());
         return new DelimiterBasedFrameDecoder(maxLength,delimiter);
     }
@@ -54,7 +52,7 @@ public abstract class Unpack {
      * @param lengthFieldLength 长度域的字节数
      * @return
      */
-    public ChannelHandler lengthFieldBasedFrameDecoder(int maxLength,int lengthFieldOffset,int lengthFieldLength){
+    static ChannelHandler lengthFieldBasedFrameDecoder(int maxLength,int lengthFieldOffset,int lengthFieldLength){
 
         return new LengthFieldBasedFrameDecoder(maxLength,lengthFieldOffset,lengthFieldLength);
     }

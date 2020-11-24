@@ -1,6 +1,9 @@
 package com.zz.nettyserver.server;
 
+import com.zz.nettyserver.cache.ServerCache;
+import com.zz.nettyserver.cache.domain.NettyServerCache;
 import com.zz.nettyserver.handler.DefaultServerHandler;
+import com.zz.nettyserver.server.manage.Unpacking;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandler;
@@ -14,7 +17,10 @@ import io.netty.util.internal.ObjectUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.ObjectUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * netty构建启动服务
@@ -24,10 +30,6 @@ import java.util.*;
  */
 public interface NettyServer {
 
-    /**
-     * netty启动服务缓存
-     */
-    HashMap<String,NettyCache> NETTY_CACHE_HASH_MAP = new HashMap<>();
 
     /**
      * 构建器
@@ -56,9 +58,8 @@ public interface NettyServer {
         private final Map<ChannelOption<?>, Object> options = new LinkedHashMap();
         //逻辑handler
         List<Class<ChannelHandler>> channelHandlers = new ArrayList<>();
-        
-        //粘包拆包器
-        private ChannelHandler stickyPackageUnpacking = null;
+        //粘包拆包信息
+        private Unpacking unpacking = null;
 
         public Bulider(){
             this.bossGroup = new NioEventLoopGroup();
@@ -141,11 +142,11 @@ public interface NettyServer {
 
         /**
          * 添加拆包粘包器
-         * @param stickyPackageUnpacking
+         * @param unpacking
          * @return
          */
-        public Bulider addStickyPackageUnpacking(ChannelHandler stickyPackageUnpacking){
-            this.stickyPackageUnpacking = stickyPackageUnpacking;
+        public Bulider addStickyPackageUnpacking(Unpacking unpacking){
+            this.unpacking = unpacking;
             return this;
         }
 
@@ -162,8 +163,8 @@ public interface NettyServer {
                         ch.pipeline().addLast(new DefaultServerHandler());
                     }else{
                         //判断是否含有粘包拆包器，有的话加在第一个
-                        if (stickyPackageUnpacking!=null){
-                            ch.pipeline().addLast(stickyPackageUnpacking);
+                        if (unpacking!=null){
+                            ch.pipeline().addLast(unpacking.buildHandler());
                         }
                         channelHandlers.stream().forEach(c->{
                             try {
@@ -238,14 +239,15 @@ public interface NettyServer {
                 //绑定端口，同步等待成功
                 //服务端启动辅助类配置完成之后，调用它的bind方法绑定监听端口
                 //随后，调用它的同步阻塞方法sync等待绑定操作完成。
-                //完成之后Netty会返回一个ChannelFuture，它的功能类似于JDK的java.util.concurrent.Future，主要用于异步操作的通知回调。
+                //完成之后Netty会返回一个ChannelFuture，它的功能类似于JDK的java.com.zz.zzsbmanage.util.concurrent.Future，主要用于异步操作的通知回调。
                 ChannelFuture f = this.serverBootstrap.bind(port).sync();
-                NettyCache cache = NettyCache.builder().channelFuture(f).name(nettyName).build();
-                NETTY_CACHE_HASH_MAP.put(nettyName, cache);
+                NettyServerCache cache = NettyServerCache.builder().channelFuture(f).name(nettyName).build();
+                ServerCache.NETTY_CACHE_MAP.put(nettyName, cache);
+                log.info(nettyName+":++++++++++++++++++++++++++++服务启动成功："+port+"++++++++++++++++++++++++++++:"+nettyName);
                 //等待服务端监听端口关闭
                 //使用f.channel().closeFuture().sync()方法进行阻塞,等待服务端链路关闭之后main函数才退出。
                 f.channel().closeFuture().sync();
-                NettyServer.NETTY_CACHE_HASH_MAP.remove(nettyName);
+                ServerCache.NETTY_CACHE_MAP.remove(nettyName);
                 log.info(nettyName+":++++++++++++++++++++++++++++服务结束，通道关闭，释放线程资源完成++++++++++++++++++++++++++++:"+nettyName);
             }finally {
                 //优雅退出，释放线程池资源
