@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
  * @author wqy
  * @version 1.0
  * @date 2020/8/10 16:04
+ * 12
  */
 public class BaseService<T extends BaseDoMain,K extends BaseDao> implements BaseServiceI<T,K>{
 
